@@ -30,18 +30,18 @@ puts WELCOME_MESSAGE
 puts HELP_MESSAGE
 
 while (buffer = Readline.readline('> ', true))
-  case buffer
-  when 'q'
-    puts 'Bow-wow! Bye!'
-    exit
-  when 's'
-    # id = buffer.to_i
-    # found_entries = users.get(id)
-    # puts found_entries
-    puts 'WIP...'
-  when 'h'
-    puts HELP_MESSAGE
-  else
-    puts "Unknown command #{buffer}"
+  begin
+    case buffer
+    when 'q'
+      puts 'Bow-wow! Bye!'
+      exit
+    when 'h'
+      puts HELP_MESSAGE
+    else
+      query = QueryParser.parse(buffer)
+      puts "I'm searching for #{query.collection}!"
+    end
+  rescue StandardError => e
+    puts e.message
   end
 end
