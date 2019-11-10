@@ -1,0 +1,8 @@
+Documentation:
+    Enabled: false
+Metrics/LineLength:
+  Enabled: true
+  Severity: warning
+  Max: 120
+Metrics/BlockLength:
+  ExcludedMethods: ['describe', 'context']
