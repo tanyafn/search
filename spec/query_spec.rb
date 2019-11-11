@@ -8,16 +8,16 @@ describe Query do
       collection: 'tickets',
       attribute: 'tags',
       operator: '=',
-      value: %w[tag1 tag2]
+      value: 'value'
     )
   end
 
   specify do
     expect(subject).to have_attributes(
-      collection: 'tickets',
-      attribute: 'tags',
-      operator: '=',
-      value: %w[tag1 tag2]
+      collection: :tickets,
+      attribute: :tags,
+      operator: :'=',
+      value: 'value'
     )
   end
 end

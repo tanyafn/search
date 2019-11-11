@@ -13,9 +13,9 @@ describe QueryParser do
         expect(subject).to be_a(Query)
 
         expect(subject).to have_attributes(
-          collection: 'users',
-          attribute: '_id',
-          operator: '=',
+          collection: :users,
+          attribute: :_id,
+          operator: :'=',
           value: 'test id'
         )
       end

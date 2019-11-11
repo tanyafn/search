@@ -2,9 +2,9 @@
 
 class Query
   def initialize(collection:, attribute:, operator:, value:)
-    @collection = collection
-    @attribute = attribute
-    @operator = operator
+    @collection = collection.to_sym
+    @attribute = attribute.to_sym
+    @operator = operator.to_sym
     @value = value
   end
 

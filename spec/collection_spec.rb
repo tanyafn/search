@@ -3,8 +3,8 @@
 require 'spec_helper'
 
 describe Collection do
-  let(:item1) { { _id: '111', name: 'Alice', good_at: %i[frontend design] } }
-  let(:item2) { { _id: '222', name: 'Bob', good_at: %i[frontend backend] } }
+  let(:item1) { { _id: '111', name: 'Alice', good_at: %w[frontend design] } }
+  let(:item2) { { _id: '222', name: 'Bob', good_at: %w[frontend backend] } }
 
   subject(:collection) { described_class.new }
 
@@ -28,9 +28,9 @@ describe Collection do
 
       it 'builds inverted index for "good_at"' do
         expect(collection.inverted_indices[:good_at].index).to eq(
-          frontend: %w[111 222],
-          backend: ['222'],
-          design: ['111']
+          'frontend' => %w[111 222],
+          'backend' => ['222'],
+          'design' => ['111']
         )
       end
 
@@ -48,6 +48,44 @@ describe Collection do
 
     it 'returns item by key' do
       expect(collection.get('111')).to eq(item1)
+    end
+  end
+
+  describe '#find' do
+    before { collection << [item1, item2] }
+
+    context 'items exist' do
+      let(:query) { Query.new(collection: 'users', attribute: 'good_at', operator: '=', value: 'frontend') }
+
+      it 'returns found items' do
+        expect(collection.find(query)).to eq([item1, item2])
+      end
+    end
+
+    context 'item does not exist' do
+      let(:query) { Query.new(collection: 'users', attribute: 'good_at', operator: '=', value: 'maths') }
+
+      it 'returns an empty array' do
+        expect(collection.find(query)).to eq([])
+      end
+    end
+
+    context 'query is not valid' do
+      context 'unknown query operator' do
+        let(:query) { Query.new(collection: 'users', attribute: 'good_at', operator: '>', value: 'frontend') }
+
+        it 'returns an empty array' do
+          expect { collection.find(query) }.to raise_error(StandardError, 'Unknown operator >')
+        end
+      end
+
+      context 'unknown attribute' do
+        let(:query) { Query.new(collection: 'users', attribute: 'foo', operator: '=', value: 'frontend') }
+
+        it 'returns an empty array' do
+          expect { collection.find(query) }.to raise_error(StandardError, 'Unknown attribute foo')
+        end
+      end
     end
   end
 end

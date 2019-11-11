@@ -21,7 +21,13 @@ class Collection
     @items[id]
   end
 
-  def search; end
+  def find(query)
+    raise "Unknown operator #{query.operator}" unless query.operator == :'='
+    raise "Unknown attribute #{query.attribute}" unless @inverted_indices.key?(query.attribute)
+
+    ids = @inverted_indices[query.attribute].lookup(query.value)
+    @items.values_at(*ids)
+  end
 
   private
 

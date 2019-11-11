@@ -24,7 +24,7 @@ HELP_MESSAGE = %(
 )
 
 users_json = File.read('./data/users.json')
-Collection.new << JsonParser.parse(users_json)
+users = Collection.new << JsonParser.parse(users_json)
 
 puts WELCOME_MESSAGE
 puts HELP_MESSAGE
@@ -39,7 +39,8 @@ while (buffer = Readline.readline('> ', true))
       puts HELP_MESSAGE
     else
       query = QueryParser.parse(buffer)
-      puts "I'm searching for #{query.collection}!"
+      found_users = users.find(query)
+      puts "Found: #{found_users}!"
     end
   rescue StandardError => e
     puts e.message
