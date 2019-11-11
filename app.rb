@@ -40,7 +40,7 @@ while (buffer = Readline.readline('> ', true))
     else
       query = QueryParser.parse(buffer)
       found_users = users.find(query)
-      puts "Found: #{found_users}!"
+      puts "Found: #{JSON.pretty_generate(found_users)}!"
     end
   rescue StandardError => e
     puts e.message
