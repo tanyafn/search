@@ -28,7 +28,7 @@ describe Dataset do
   describe '#search' do
     let(:user1) { { _id: '1', name: 'Alice', org_id: '3' } }
     let(:user2) { { _id: '2', name: 'Bob', org_id: '4' } }
-    let(:org1) { { _id: '3', name: 'Foo'} }
+    let(:org1) { { _id: '3', name: 'Foo' } }
     let(:org2) { { _id: '4', name: 'Bar' } }
 
     let(:users) { Collection.new(:users).tap { |c| c << [user1, user2] } }
@@ -36,7 +36,7 @@ describe Dataset do
     let(:assoc) do
       Association.new(
         child_collection: :users,
-        child_name: :members,
+        children_name: :members,
         reference_attribute: :org_id,
         parent_collection: :orgs,
         parent_name: :org
@@ -49,23 +49,45 @@ describe Dataset do
       dataset.add_association(assoc)
     end
 
-    let(:query) do
-      Query.new(
-        collection: 'users',
-        attribute: 'name',
-        operator: '=',
-        value: 'Alice'
-      )
+    describe 'searching for items with parents' do
+      let(:query) do
+        Query.new(
+          collection: 'users',
+          attribute: 'name',
+          operator: '=',
+          value: 'Alice'
+        )
+      end
+
+      it 'finds items with parent associations' do
+        expect(dataset.search(query).size).to eq(1)
+        expect(dataset.search(query).first).to eq(
+          _id: '1',
+          name: 'Alice',
+          org: { _id: '3', name: 'Foo' },
+          org_id: '3'
+        )
+      end
     end
 
-    it 'finds existing items' do
-      expect(dataset.search(query).size).to eq(1)
-      expect(dataset.search(query).first).to eq(
-        _id: '1',
-        name: 'Alice',
-        org: { _id: '3', name: 'Foo' },
-        org_id: '3'
-      )
+    describe 'searching for items with children' do
+      let(:query) do
+        Query.new(
+          collection: 'orgs',
+          attribute: 'name',
+          operator: '=',
+          value: 'Foo'
+        )
+      end
+
+      it 'finds items with child associations' do
+        expect(dataset.search(query).size).to eq(1)
+        expect(dataset.search(query).first).to eq(
+          _id: '3',
+          name: 'Foo',
+          members: [{ _id: '1', name: 'Alice', org_id: '3' }]
+        )
+      end
     end
   end
 end

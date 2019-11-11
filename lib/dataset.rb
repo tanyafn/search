@@ -22,7 +22,7 @@ class Dataset
     @associations << assoc
   end
 
-  def search(query)
+  def search(query) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     items = @collections[query.collection].find(query)
 
     @associations.each do |assoc|
@@ -33,6 +33,21 @@ class Dataset
           parent_id = item[assoc.reference_attribute]
           item[assoc.parent_name] = parent_collection.get(parent_id)
         end
+      end
+
+      next unless assoc.parent_collection == query.collection
+
+      child_collection = @collections[assoc.child_collection]
+
+      items.each do |item|
+        query = Query.new(
+          collection: assoc.child_collection,
+          attribute: assoc.reference_attribute,
+          operator: '=',
+          value: item[:_id]
+        )
+
+        item[assoc.children_name] = child_collection.find(query)
       end
     end
 

@@ -36,6 +36,13 @@ dataset = Dataset.new
 dataset.add_collection(users)
 dataset.add_collection(tickets)
 dataset.add_collection(organizations)
+dataset.add_association(Association.new(
+                          child_collection: :users,
+                          children_name: :members,
+                          reference_attribute: :organization_id,
+                          parent_collection: :organizations,
+                          parent_name: :organization
+                        ))
 
 puts WELCOME_MESSAGE
 puts HELP_MESSAGE
