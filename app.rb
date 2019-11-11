@@ -24,7 +24,18 @@ HELP_MESSAGE = %(
 )
 
 users_json = File.read('./data/users.json')
-users = Collection.new << JsonParser.parse(users_json)
+tickets_json = File.read('./data/tickets.json')
+organizations_json = File.read('./data/organizations.json')
+
+users = Collection.new(:users) << JsonParser.parse(users_json)
+tickets = Collection.new(:tickets) << JsonParser.parse(tickets_json)
+organizations = Collection.new(:organizations) << JsonParser.parse(organizations_json)
+
+dataset = Dataset.new
+
+dataset.add_collection(users)
+dataset.add_collection(tickets)
+dataset.add_collection(organizations)
 
 puts WELCOME_MESSAGE
 puts HELP_MESSAGE
@@ -39,8 +50,8 @@ while (buffer = Readline.readline('> ', true))
       puts HELP_MESSAGE
     else
       query = QueryParser.parse(buffer)
-      found_users = users.find(query)
-      puts "Found: #{JSON.pretty_generate(found_users)}!"
+      results = dataset.search(query)
+      puts "Found: #{JSON.pretty_generate(results)}!"
     end
   rescue StandardError => e
     puts e.message
