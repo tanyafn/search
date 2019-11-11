@@ -35,10 +35,10 @@ describe Dataset do
     let(:orgs) { Collection.new(:orgs).tap { |c| c << [org1, org2] } }
     let(:assoc) do
       Association.new(
-        child: :users,
+        child_collection: :users,
         child_name: :members,
         reference_attribute: :org_id,
-        parent: :orgs,
+        parent_collection: :orgs,
         parent_name: :org
       )
     end

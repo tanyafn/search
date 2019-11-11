@@ -26,8 +26,8 @@ class Dataset
     items = @collections[query.collection].find(query)
 
     @associations.each do |assoc|
-      if assoc.child == query.collection
-        parent_collection = @collections[assoc.parent]
+      if assoc.child_collection == query.collection
+        parent_collection = @collections[assoc.parent_collection]
 
         items.each do |item|
           parent_id = item[assoc.reference_attribute]
