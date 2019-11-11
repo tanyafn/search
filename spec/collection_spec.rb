@@ -74,7 +74,7 @@ describe Collection do
       context 'unknown query operator' do
         let(:query) { Query.new(collection: 'users', attribute: 'good_at', operator: '>', value: 'frontend') }
 
-        it 'returns an empty array' do
+        it 'raises an error' do
           expect { collection.find(query) }.to raise_error(StandardError, 'Unknown operator >')
         end
       end
@@ -82,7 +82,7 @@ describe Collection do
       context 'unknown attribute' do
         let(:query) { Query.new(collection: 'users', attribute: 'foo', operator: '=', value: 'frontend') }
 
-        it 'returns an empty array' do
+        it 'raises an error' do
           expect { collection.find(query) }.to raise_error(StandardError, 'Unknown attribute foo')
         end
       end
