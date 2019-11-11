@@ -26,21 +26,46 @@ describe Dataset do
   end
 
   describe '#search' do
-    let(:item1) { { _id: '111', name: 'Alice', good_at: %w[frontend design] } }
-    let(:item2) { { _id: '222', name: 'Bob', good_at: %w[frontend backend] } }
-    let(:collection) { Collection.new(:users).tap { |c| c << [item1, item2] } }
+    let(:user1) { { _id: '1', name: 'Alice', org_id: '3' } }
+    let(:user2) { { _id: '2', name: 'Bob', org_id: '4' } }
+    let(:org1) { { _id: '3', name: 'Foo'} }
+    let(:org2) { { _id: '4', name: 'Bar' } }
 
-    before { dataset.add_collection(collection) }
+    let(:users) { Collection.new(:users).tap { |c| c << [user1, user2] } }
+    let(:orgs) { Collection.new(:orgs).tap { |c| c << [org1, org2] } }
+    let(:assoc) do
+      Association.new(
+        child: :users,
+        child_name: :members,
+        reference_attribute: :org_id,
+        parent: :orgs,
+        parent_name: :org
+      )
+    end
+
+    before do
+      dataset.add_collection(users)
+      dataset.add_collection(orgs)
+      dataset.add_association(assoc)
+    end
 
     let(:query) do
-      Query.new(collection: 'users',
-                attribute: 'name',
-                operator: '=',
-                value: 'Alice')
+      Query.new(
+        collection: 'users',
+        attribute: 'name',
+        operator: '=',
+        value: 'Alice'
+      )
     end
 
     it 'finds existing items' do
       expect(dataset.search(query).size).to eq(1)
+      expect(dataset.search(query).first).to eq(
+        _id: '1',
+        name: 'Alice',
+        org: { _id: '3', name: 'Foo' },
+        org_id: '3'
+      )
     end
   end
 end

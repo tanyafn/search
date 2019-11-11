@@ -23,6 +23,19 @@ class Dataset
   end
 
   def search(query)
-    @collections[query.collection].find(query)
+    items = @collections[query.collection].find(query)
+
+    @associations.each do |assoc|
+      if assoc.child == query.collection
+        parent_collection = @collections[assoc.parent]
+
+        items.each do |item|
+          parent_id = item[assoc.reference_attribute]
+          item[assoc.parent_name] = parent_collection.get(parent_id)
+        end
+      end
+    end
+
+    items
   end
 end

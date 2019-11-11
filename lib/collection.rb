@@ -19,7 +19,7 @@ class Collection
   end
 
   def get(id)
-    @items[id]
+    @items[id].dup
   end
 
   def find(query)
@@ -27,7 +27,7 @@ class Collection
     raise "Unknown attribute #{query.attribute}" unless @inverted_indices.key?(query.attribute)
 
     ids = @inverted_indices[query.attribute].lookup(query.value)
-    @items.values_at(*ids)
+    @items.values_at(*ids).map(&:dup)
   end
 
   private
