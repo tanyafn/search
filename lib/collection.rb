@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 class Collection
+  UnknownOperator = Class.new(StandardError)
+  UnknownAttribute = Class.new(StandardError)
+
   def initialize(name)
     @name = name
     @items = {}
@@ -23,8 +26,13 @@ class Collection
   end
 
   def find(query)
-    raise "Unknown operator #{query.operator}" unless query.operator == :'='
-    raise "Unknown attribute #{query.attribute}" unless @inverted_indices.key?(query.attribute)
+    unless query.operator == :'='
+      raise UnknownOperator, "Unknown operator #{query.operator}"
+    end
+
+    unless @inverted_indices.key?(query.attribute)
+      raise UnknownAttribute, "Unknown attribute #{query.attribute}"
+    end
 
     ids = @inverted_indices[query.attribute].lookup(query.value)
     @items.values_at(*ids).compact.map(&:dup)

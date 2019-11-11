@@ -89,5 +89,22 @@ describe Dataset do
         )
       end
     end
+
+    describe 'searching in unknonw collection' do
+      let(:query) do
+        Query.new(
+          collection: 'none',
+          attribute: 'name',
+          operator: '=',
+          value: 'Foo'
+        )
+      end
+
+      it 'raises error' do
+        expect {
+          dataset.search(query)
+        }.to raise_error(Dataset::UnknownCollection)
+      end
+    end
   end
 end

@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Dataset
+  UnknownCollection = Class.new(StandardError)
+
   def initialize
     @collections = {}
     @associations = []
@@ -23,7 +25,7 @@ class Dataset
   end
 
   def search(query) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-    items = @collections[query.collection].find(query)
+    items = select_items(query)
 
     @associations.each do |assoc|
       if assoc.child_collection == query.collection
@@ -51,5 +53,15 @@ class Dataset
     end
 
     items
+  end
+
+  private
+
+  def select_items(query)
+    unless @collections.key?(query.collection)
+      raise UnknownCollection, "Unknown collection #{query.collection}"
+    end
+
+    @collections[query.collection].find(query)
   end
 end

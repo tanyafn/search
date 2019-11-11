@@ -75,7 +75,7 @@ describe Collection do
         let(:query) { Query.new(collection: 'users', attribute: 'good_at', operator: '>', value: 'frontend') }
 
         it 'raises an error' do
-          expect { collection.find(query) }.to raise_error(StandardError, 'Unknown operator >')
+          expect { collection.find(query) }.to raise_error(Collection::UnknownOperator, 'Unknown operator >')
         end
       end
 
@@ -83,7 +83,7 @@ describe Collection do
         let(:query) { Query.new(collection: 'users', attribute: 'foo', operator: '=', value: 'frontend') }
 
         it 'raises an error' do
-          expect { collection.find(query) }.to raise_error(StandardError, 'Unknown attribute foo')
+          expect { collection.find(query) }.to raise_error(Collection::UnknownAttribute, 'Unknown attribute foo')
         end
       end
     end
