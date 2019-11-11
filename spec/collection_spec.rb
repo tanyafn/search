@@ -6,7 +6,7 @@ describe Collection do
   let(:item1) { { _id: '111', name: 'Alice', good_at: %w[frontend design] } }
   let(:item2) { { _id: '222', name: 'Bob', good_at: %w[frontend backend] } }
 
-  subject(:collection) { described_class.new }
+  subject(:collection) { described_class.new(:users) }
 
   describe '#<<' do
     it 'adds one item into collection' do

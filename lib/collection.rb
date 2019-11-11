@@ -1,12 +1,13 @@
 # frozen_string_literal: true
 
 class Collection
-  def initialize
+  def initialize(name)
+    @name = name
     @items = {}
     @inverted_indices = {}
   end
 
-  attr_reader :items, :inverted_indices
+  attr_reader :name, :items, :inverted_indices
 
   def <<(items)
     Array.wrap(items).each do |item|
