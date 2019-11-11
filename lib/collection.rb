@@ -27,7 +27,7 @@ class Collection
     raise "Unknown attribute #{query.attribute}" unless @inverted_indices.key?(query.attribute)
 
     ids = @inverted_indices[query.attribute].lookup(query.value)
-    @items.values_at(*ids).map(&:dup)
+    @items.values_at(*ids).compact.map(&:dup)
   end
 
   private

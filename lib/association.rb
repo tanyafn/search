@@ -9,5 +9,9 @@ class Association
     @parent_name = parent_name
   end
 
-  attr_reader :child_collection, :children_name, :reference_attribute, :parent_collection, :parent_name
+  attr_reader :child_collection,
+    :children_name,
+    :reference_attribute,
+    :parent_collection,
+    :parent_name
 end

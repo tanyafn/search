@@ -38,12 +38,34 @@ dataset.add_collection(tickets)
 dataset.add_collection(organizations)
 dataset.add_association(Association.new(
                           child_collection: :users,
-                          children_name: :members,
+                          children_name: :users,
                           reference_attribute: :organization_id,
                           parent_collection: :organizations,
                           parent_name: :organization
+                        )
+                      )
+dataset.add_association(Association.new(
+                          child_collection: :tickets,
+                          children_name: :submitted_tickets,
+                          reference_attribute: :submitter_id,
+                          parent_collection: :users,
+                          parent_name: :submitter
                         ))
-
+dataset.add_association(Association.new(
+                          child_collection: :tickets,
+                          children_name: :assigned_tickets,
+                          reference_attribute: :assignee_id,
+                          parent_collection: :users,
+                          parent_name: :assignee
+                        ))
+dataset.add_association(Association.new(
+                          child_collection: :tickets,
+                          children_name: :tickets,
+                          reference_attribute: :organization_id,
+                          parent_collection: :organizations,
+                          parent_name: :organization
+                        )
+                      )
 puts WELCOME_MESSAGE
 puts HELP_MESSAGE
 
