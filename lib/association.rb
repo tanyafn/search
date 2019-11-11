@@ -10,8 +10,8 @@ class Association
   end
 
   attr_reader :child_collection,
-    :children_name,
-    :reference_attribute,
-    :parent_collection,
-    :parent_name
+              :children_name,
+              :reference_attribute,
+              :parent_collection,
+              :parent_name
 end

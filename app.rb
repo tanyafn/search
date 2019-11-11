@@ -42,8 +42,7 @@ dataset.add_association(Association.new(
                           reference_attribute: :organization_id,
                           parent_collection: :organizations,
                           parent_name: :organization
-                        )
-                      )
+                        ))
 dataset.add_association(Association.new(
                           child_collection: :tickets,
                           children_name: :submitted_tickets,
@@ -64,8 +63,7 @@ dataset.add_association(Association.new(
                           reference_attribute: :organization_id,
                           parent_collection: :organizations,
                           parent_name: :organization
-                        )
-                      )
+                        ))
 puts WELCOME_MESSAGE
 puts HELP_MESSAGE
 

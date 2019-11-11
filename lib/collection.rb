@@ -26,13 +26,9 @@ class Collection
   end
 
   def find(query)
-    unless query.operator == :'='
-      raise UnknownOperator, "Unknown operator #{query.operator}"
-    end
+    raise UnknownOperator, "Unknown operator #{query.operator}" unless query.operator == :'='
 
-    unless @inverted_indices.key?(query.attribute)
-      raise UnknownAttribute, "Unknown attribute #{query.attribute}"
-    end
+    raise UnknownAttribute, "Unknown attribute #{query.attribute}" unless @inverted_indices.key?(query.attribute)
 
     ids = @inverted_indices[query.attribute].lookup(query.value)
     @items.values_at(*ids).compact.map(&:dup)

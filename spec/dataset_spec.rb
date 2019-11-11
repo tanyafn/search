@@ -101,9 +101,67 @@ describe Dataset do
       end
 
       it 'raises error' do
-        expect {
+        expect do
           dataset.search(query)
-        }.to raise_error(Dataset::UnknownCollection)
+        end.to raise_error(Dataset::UnknownCollection)
+      end
+    end
+
+    describe 'search with invalid parent association' do
+      let(:invalid_assoc) do
+        Association.new(
+          child_collection: :users,
+          children_name: :members,
+          reference_attribute: :org_id,
+          parent_collection: :none,
+          parent_name: :org
+        )
+      end
+
+      before { dataset.add_association(invalid_assoc) }
+
+      let(:query) do
+        Query.new(
+          collection: 'users',
+          attribute: 'name',
+          operator: '=',
+          value: 'Alice'
+        )
+      end
+
+      it 'raises error' do
+        expect do
+          dataset.search(query)
+        end.to raise_error(Dataset::InvalidAssociation)
+      end
+    end
+
+    describe 'search with invalid child association' do
+      let(:invalid_assoc) do
+        Association.new(
+          child_collection: :none,
+          children_name: :members,
+          reference_attribute: :org_id,
+          parent_collection: :orgs,
+          parent_name: :org
+        )
+      end
+
+      before { dataset.add_association(invalid_assoc) }
+
+      let(:query) do
+        Query.new(
+          collection: 'orgs',
+          attribute: 'name',
+          operator: '=',
+          value: 'Foo'
+        )
+      end
+
+      it 'raises error' do
+        expect do
+          dataset.search(query)
+        end.to raise_error(Dataset::InvalidAssociation)
       end
     end
   end

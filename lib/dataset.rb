@@ -2,6 +2,7 @@
 
 class Dataset
   UnknownCollection = Class.new(StandardError)
+  InvalidAssociation = Class.new(StandardError)
 
   def initialize
     @collections = {}
@@ -29,6 +30,10 @@ class Dataset
 
     @associations.each do |assoc|
       if assoc.child_collection == query.collection
+        unless @collections.key?(assoc.parent_collection)
+          raise InvalidAssociation, "Invalid parent collection #{assoc.parent_collection}"
+        end
+
         parent_collection = @collections[assoc.parent_collection]
 
         items.each do |item|
@@ -37,18 +42,21 @@ class Dataset
         end
       end
 
-      if assoc.parent_collection == query.collection
-        child_collection = @collections[assoc.child_collection]
+      next unless assoc.parent_collection == query.collection
+      unless @collections.key?(assoc.child_collection)
+        raise InvalidAssociation, "Invalid child collection #{assoc.child_collection}"
+      end
 
-        items.each do |item|
-          q = Query.new(
-            collection: assoc.child_collection,
-            attribute: assoc.reference_attribute,
-            operator: '=',
-            value: item[:_id]
-          )
-          item[assoc.children_name] = child_collection.find(q)
-        end
+      child_collection = @collections[assoc.child_collection]
+
+      items.each do |item|
+        q = Query.new(
+          collection: assoc.child_collection,
+          attribute: assoc.reference_attribute,
+          operator: '=',
+          value: item[:_id]
+        )
+        item[assoc.children_name] = child_collection.find(q)
       end
     end
 
@@ -58,9 +66,7 @@ class Dataset
   private
 
   def select_items(query)
-    unless @collections.key?(query.collection)
-      raise UnknownCollection, "Unknown collection #{query.collection}"
-    end
+    raise UnknownCollection, "Unknown collection #{query.collection}" unless @collections.key?(query.collection)
 
     @collections[query.collection].find(query)
   end
