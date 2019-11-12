@@ -10,7 +10,7 @@ describe Collection do
 
   describe '#<<' do
     it 'adds an item into collection' do
-      expect { collection << item1 }.to change { collection.get('111') }.from(nil).to(item1)
+      expect { collection << item1 }.to change { collection['111'] }.from(nil).to(item1)
     end
 
     describe 'builds inverted indices for item fields' do
@@ -23,11 +23,11 @@ describe Collection do
     end
   end
 
-  describe '#get' do
+  describe '#[]' do
     before { collection << item1 }
 
     it 'returns item by key' do
-      expect(collection.get('111')).to eq(item1)
+      expect(collection['111']).to eq(item1)
     end
   end
 end

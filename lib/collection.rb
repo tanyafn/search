@@ -16,7 +16,7 @@ class Collection
     self
   end
 
-  def get(id)
+  def [](id)
     @items[id].dup
   end
 

@@ -19,8 +19,8 @@ module Selectors
       raise UnknownAttribute, "Unknown attribute #{attribute}" unless collection.inverted_indices.key?(attribute)
 
       index = collection.inverted_indices[attribute]
-      ids = index.lookup(value)
-      ids.map { |id| collection.get(id) }.compact
+      item_ids = index.lookup(value)
+      item_ids.map { |item_id| collection[item_id] }.compact
     end
   end
 end

@@ -58,8 +58,8 @@ class Dataset
     end
 
     parent_collection = @collections[assoc.parent_collection]
-    parent_id = item[assoc.reference_attribute]
-    item.dup.tap { |i| i[assoc.parent_name] = parent_collection.get(parent_id) }
+    parent_item_id = item[assoc.reference_attribute]
+    item.dup.tap { |i| i[assoc.parent_name] = parent_collection[parent_item_id] }
   end
 
   def resolve_parent_association(assoc, item)
