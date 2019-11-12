@@ -23,15 +23,11 @@ HELP_MESSAGE = %(
   To command Snoopy to do anything enter the command and press 'Enter'
 )
 
-users_json = File.read('./data/users.json')
-tickets_json = File.read('./data/tickets.json')
-organizations_json = File.read('./data/organizations.json')
-
 dataset = Dataset.new
 
-dataset.add_collection(:users, JsonParser.parse(users_json))
-dataset.add_collection(:tickets, JsonParser.parse(tickets_json))
-dataset.add_collection(:organizations, JsonParser.parse(organizations_json))
+dataset.add_collection(:users, DataSource[:users])
+dataset.add_collection(:tickets, DataSource[:tickets])
+dataset.add_collection(:organizations, DataSource[:organizations])
 
 dataset.add_association(child_collection: :users,
                         children_name: :users,
