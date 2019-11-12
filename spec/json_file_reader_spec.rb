@@ -12,9 +12,9 @@ describe JsonFileReader do
 
     context 'data file with given name does not exist' do
       it 'raises an error' do
-        expect {
+        expect do
           JsonFileReader.read('./spec/support/data/invalid_data_format.json')
-        }.to raise_error(JsonFileReader::BadData)
+        end.to raise_error(JsonFileReader::BadData)
       end
     end
   end

@@ -30,7 +30,7 @@ class Dataset
     raise UnknownCollection, "Unknown collection #{query.collection}" unless @collections.key?(query.collection)
 
     collection = @collections[query.collection]
-    selector = Mapper.resolve(query)
+    selector = Selectors::Mapper.resolve(query)
     items = selector.select_from(collection)
     items.map { |item| resolve_associations(item, query.collection) }
   end
@@ -69,7 +69,7 @@ class Dataset
 
     child_collection = @collections[assoc.child_collection]
 
-    selector = EqualitySelector.new(attribute: assoc.reference_attribute, value: item[:_id])
+    selector = Selectors::Equality.new(attribute: assoc.reference_attribute, value: item[:_id])
     item.dup.tap { |i| i[assoc.children_name] = selector.select_from(child_collection) }
   end
 end

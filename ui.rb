@@ -5,7 +5,7 @@ require 'readline'
 class UI
   WELCOME_MESSAGE = %(
     ********************************************************************
-            Welcome to Snoopy: almost-elasticsearch app! 🐶
+            Welcome to Snoopy App: almost-elasticsearch app! 🐶
     ********************************************************************
 
     Snoopy is good at finding things, ask him to find anything for you!

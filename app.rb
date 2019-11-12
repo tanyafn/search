@@ -7,7 +7,7 @@ require_relative './lib/search'
 require_relative './ui'
 
 begin
-  config = JsonFileReader.read("config.json")
+  config = JsonFileReader.read('config.json')
   dataset = Dataset.new
 
   config[:collections].each do |collection|
