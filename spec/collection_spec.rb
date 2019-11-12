@@ -55,35 +55,35 @@ describe Collection do
     before { collection << [item1, item2] }
 
     context 'items exist' do
-      let(:query) { Query.new(collection: 'users', attribute: 'good_at', operator: '=', value: 'frontend') }
+      let(:selector) { EqualitySelector.new(attribute: 'good_at', value: 'frontend') }
 
       it 'returns found items' do
-        expect(collection.select(query)).to eq([item1, item2])
+        expect(collection.select(selector)).to eq([item1, item2])
       end
     end
 
     context 'item does not exist' do
-      let(:query) { Query.new(collection: 'users', attribute: 'good_at', operator: '=', value: 'maths') }
+      let(:selector) { EqualitySelector.new(attribute: 'good_at', value: 'maths') }
 
       it 'returns an empty array' do
-        expect(collection.select(query)).to eq([])
+        expect(collection.select(selector)).to eq([])
       end
     end
 
-    context 'query is not valid' do
+    context 'selector is not valid' do
       context 'unknown query operator' do
-        let(:query) { Query.new(collection: 'users', attribute: 'good_at', operator: '>', value: 'frontend') }
+        let(:selector) { double }
 
         it 'raises an error' do
-          expect { collection.select(query) }.to raise_error(Collection::UnknownOperator, 'Unknown operator >')
+          expect { collection.select(selector) }.to raise_error(Collection::UnknownOperator)
         end
       end
 
       context 'unknown attribute' do
-        let(:query) { Query.new(collection: 'users', attribute: 'foo', operator: '=', value: 'frontend') }
+        let(:selector) { EqualitySelector.new(attribute: 'none', value: 'maths') }
 
         it 'raises an error' do
-          expect { collection.select(query) }.to raise_error(Collection::UnknownAttribute, 'Unknown attribute foo')
+          expect { collection.select(selector) }.to raise_error(Collection::UnknownAttribute, 'Unknown attribute none')
         end
       end
     end

@@ -28,7 +28,14 @@ class Dataset
   def search(query)
     raise UnknownCollection, "Unknown collection #{query.collection}" unless @collections.key?(query.collection)
 
-    items = @collections[query.collection].select(query)
+    selector = case query.operator
+               when :'='
+                 EqualitySelector.new(attribute: query.attribute, value: query.value)
+               else
+                 raise 'Unknown operator'
+               end
+
+    items = @collections[query.collection].select(selector)
     items.map { |item| resolve_associations(item, query.collection) }
   end
 
@@ -59,19 +66,14 @@ class Dataset
     item.dup.tap { |i| i[assoc.parent_name] = parent_collection.get(parent_id) }
   end
 
-  def resolve_parent_association(assoc, item) # rubocop:disable Metrics/MethodLength
+  def resolve_parent_association(assoc, item)
     unless @collections.key?(assoc.child_collection)
       raise InvalidAssociation, "Invalid child collection #{assoc.child_collection}"
     end
 
     child_collection = @collections[assoc.child_collection]
 
-    q = Query.new(
-      collection: assoc.child_collection,
-      attribute: assoc.reference_attribute,
-      operator: '=',
-      value: item[:_id]
-    )
-    item.dup.tap { |i| i[assoc.children_name] = child_collection.select(q) }
+    s = EqualitySelector.new(attribute: assoc.reference_attribute, value: item[:_id])
+    item.dup.tap { |i| i[assoc.children_name] = child_collection.select(s) }
   end
 end

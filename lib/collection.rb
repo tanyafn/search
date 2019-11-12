@@ -25,13 +25,18 @@ class Collection
     @items[id].dup
   end
 
-  def select(query)
-    raise UnknownOperator, "Unknown operator #{query.operator}" unless query.operator == :'='
+  def select(selector)
+    case selector
+    when EqualitySelector
+      unless @inverted_indices.key?(selector.attribute)
+        raise UnknownAttribute, "Unknown attribute #{selector.attribute}"
+      end
 
-    raise UnknownAttribute, "Unknown attribute #{query.attribute}" unless @inverted_indices.key?(query.attribute)
-
-    ids = @inverted_indices[query.attribute].lookup(query.value)
-    @items.values_at(*ids).compact.map(&:dup)
+      ids = @inverted_indices[selector.attribute].lookup(selector.value)
+      @items.values_at(*ids).compact.map(&:dup)
+    else
+      raise UnknownOperator, "Unknown selector #{selector.class.name}"
+    end
   end
 
   private
