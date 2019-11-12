@@ -20,21 +20,6 @@ describe Collection do
       end
 
       it { expect(collection.inverted_indices.keys).to eq(%i[_id name skills]) }
-
-      it 'builds inverted index for "skills"' do
-        expect(collection.inverted_indices[:skills].index).to eq(
-          'frontend' => %w[111 222],
-          'backend' => ['222'],
-          'design' => ['111']
-        )
-      end
-
-      it 'builds inverted index for "name"' do
-        expect(collection.inverted_indices[:name].index).to eq(
-          'Alice' => ['111'],
-          'Bob' => ['222']
-        )
-      end
     end
   end
 

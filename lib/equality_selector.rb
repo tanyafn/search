@@ -15,9 +15,9 @@ class EqualitySelector
   end
 
   def select_from(collection)
-    index = collection.inverted_indices[attribute]
-    raise UnknownAttribute, "Unknown attribute #{attribute}" unless index
+    raise UnknownAttribute, "Unknown attribute #{attribute}" unless collection.inverted_indices.key?(attribute)
 
+    index = collection.inverted_indices[attribute]
     ids = index.lookup(value)
     ids.map { |id| collection.get(id) }.compact
   end

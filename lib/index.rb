@@ -2,18 +2,14 @@
 
 class Index
   def initialize
-    @index = {}
+    @index = Hash.new { |hash, value| hash[value] = Set.new }
   end
 
-  attr_reader :index
-
   def add(value, id)
-    Array.wrap(value).each do |v|
-      @index[v] = ((@index[v] || []) << id).uniq
-    end
+    @index[value] << id
   end
 
   def lookup(value)
-    @index.fetch(value, [])
+    @index[value].to_a
   end
 end
