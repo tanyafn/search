@@ -27,15 +27,11 @@ users_json = File.read('./data/users.json')
 tickets_json = File.read('./data/tickets.json')
 organizations_json = File.read('./data/organizations.json')
 
-users = Collection.new(:users) << JsonParser.parse(users_json)
-tickets = Collection.new(:tickets) << JsonParser.parse(tickets_json)
-organizations = Collection.new(:organizations) << JsonParser.parse(organizations_json)
-
 dataset = Dataset.new
 
-dataset.add_collection(users)
-dataset.add_collection(tickets)
-dataset.add_collection(organizations)
+dataset.add_collection(:users, JsonParser.parse(users_json))
+dataset.add_collection(:tickets, JsonParser.parse(tickets_json))
+dataset.add_collection(:organizations, JsonParser.parse(organizations_json))
 dataset.add_association(Association.new(
                           child_collection: :users,
                           children_name: :users,

@@ -6,10 +6,8 @@ describe Dataset do
   subject(:dataset) { described_class.new }
 
   describe '#add_collection' do
-    let(:collection) { double(:collection, name: :a) }
-
     it 'adds a colelction' do
-      expect { dataset.add_collection(collection) }.to change {
+      expect { dataset.add_collection(:a, [{a: :b}]) }.to change {
         dataset.collections.count
       }.from(0).to(1)
     end
@@ -31,8 +29,6 @@ describe Dataset do
     let(:org1) { { _id: '3', name: 'Foo' } }
     let(:org2) { { _id: '4', name: 'Bar' } }
 
-    let(:users) { Collection.new(:users).tap { |c| c << [user1, user2] } }
-    let(:orgs) { Collection.new(:orgs).tap { |c| c << [org1, org2] } }
     let(:assoc) do
       Association.new(
         child_collection: :users,
@@ -44,8 +40,8 @@ describe Dataset do
     end
 
     before do
-      dataset.add_collection(users)
-      dataset.add_collection(orgs)
+      dataset.add_collection(:users, [user1, user2])
+      dataset.add_collection(:orgs, [org1, org2])
       dataset.add_association(assoc)
     end
 

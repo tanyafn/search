@@ -17,8 +17,8 @@ class Dataset
     @associations.clone
   end
 
-  def add_collection(collection)
-    @collections[collection.name.to_sym] = collection
+  def add_collection(name, attrs)
+    @collections[name.to_sym] = Collection.new(name) << attrs
   end
 
   def add_association(assoc)
