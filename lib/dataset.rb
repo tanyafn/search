@@ -18,7 +18,8 @@ class Dataset
   end
 
   def add_collection(name, items)
-    @collections[name.to_sym] = Collection.new(name) << items
+    collection = items.inject(Collection.new(name), :<<)
+    @collections[name.to_sym] = collection
   end
 
   def add_association(attrs)

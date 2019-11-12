@@ -12,11 +12,9 @@ class Collection
 
   attr_reader :name, :items, :inverted_indices
 
-  def <<(items)
-    Array.wrap(items).each do |item|
-      @items[item[:_id]] = item
-      add_item_to_inverted_index(item)
-    end
+  def <<(item)
+    @items[item[:_id]] = item
+    add_item_to_inverted_index(item)
 
     self
   end

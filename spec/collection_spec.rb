@@ -9,20 +9,15 @@ describe Collection do
   subject(:collection) { described_class.new(:users) }
 
   describe '#<<' do
-    it 'adds one item into collection' do
+    it 'adds an item into collection' do
       expect { collection << item1 }.to change { collection.get('111') }.from(nil).to(item1)
     end
 
-    it 'adds multiple items into collection' do
-      expect { collection << [item1, item2] }.to change {
-        collection.get('111')
-      }.from(nil).to(item1).and change {
-        collection.get('222')
-      }.from(nil).to(item2)
-    end
-
     describe 'builds inverted indices for item fields' do
-      before { collection << [item1, item2] }
+      before do
+        collection << item1
+        collection << item2
+      end
 
       it { expect(collection.inverted_indices.keys).to eq(%i[_id name skills]) }
 
@@ -44,7 +39,7 @@ describe Collection do
   end
 
   describe '#get' do
-    before { collection << [item1] }
+    before { collection << item1 }
 
     it 'returns item by key' do
       expect(collection.get('111')).to eq(item1)
@@ -52,7 +47,10 @@ describe Collection do
   end
 
   describe '#select' do
-    before { collection << [item1, item2] }
+    before do
+      collection << item1
+      collection << item2
+    end
 
     context 'items exist' do
       let(:selector) { EqualitySelector.new(attribute: 'skills', value: 'frontend') }
