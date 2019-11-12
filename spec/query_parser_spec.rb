@@ -9,8 +9,8 @@ describe QueryParser do
     context 'when can parse query' do
       let(:queries) do
         [
-          'select    users where _id="test id"',
-          ' SeLeCT    users  whERe _id=   "test id" '
+          'select    users where _id = "test id"',
+          ' SeLeCT    users  whERe _id =   "test id" '
         ]
       end
 
