@@ -28,7 +28,7 @@ class Dataset
   def search(query)
     raise UnknownCollection, "Unknown collection #{query.collection}" unless @collections.key?(query.collection)
 
-    items = @collections[query.collection].find(query)
+    items = @collections[query.collection].select(query)
     items.map { |item| resolve_associations(item, query.collection) }
   end
 
@@ -72,6 +72,6 @@ class Dataset
       operator: '=',
       value: item[:_id]
     )
-    item.dup.tap { |i| i[assoc.children_name] = child_collection.find(q) }
+    item.dup.tap { |i| i[assoc.children_name] = child_collection.select(q) }
   end
 end

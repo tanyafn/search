@@ -25,7 +25,7 @@ class Collection
     @items[id].dup
   end
 
-  def find(query)
+  def select(query)
     raise UnknownOperator, "Unknown operator #{query.operator}" unless query.operator == :'='
 
     raise UnknownAttribute, "Unknown attribute #{query.attribute}" unless @inverted_indices.key?(query.attribute)

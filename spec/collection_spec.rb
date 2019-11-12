@@ -51,14 +51,14 @@ describe Collection do
     end
   end
 
-  describe '#find' do
+  describe '#select' do
     before { collection << [item1, item2] }
 
     context 'items exist' do
       let(:query) { Query.new(collection: 'users', attribute: 'good_at', operator: '=', value: 'frontend') }
 
       it 'returns found items' do
-        expect(collection.find(query)).to eq([item1, item2])
+        expect(collection.select(query)).to eq([item1, item2])
       end
     end
 
@@ -66,7 +66,7 @@ describe Collection do
       let(:query) { Query.new(collection: 'users', attribute: 'good_at', operator: '=', value: 'maths') }
 
       it 'returns an empty array' do
-        expect(collection.find(query)).to eq([])
+        expect(collection.select(query)).to eq([])
       end
     end
 
@@ -75,7 +75,7 @@ describe Collection do
         let(:query) { Query.new(collection: 'users', attribute: 'good_at', operator: '>', value: 'frontend') }
 
         it 'raises an error' do
-          expect { collection.find(query) }.to raise_error(Collection::UnknownOperator, 'Unknown operator >')
+          expect { collection.select(query) }.to raise_error(Collection::UnknownOperator, 'Unknown operator >')
         end
       end
 
@@ -83,7 +83,7 @@ describe Collection do
         let(:query) { Query.new(collection: 'users', attribute: 'foo', operator: '=', value: 'frontend') }
 
         it 'raises an error' do
-          expect { collection.find(query) }.to raise_error(Collection::UnknownAttribute, 'Unknown attribute foo')
+          expect { collection.select(query) }.to raise_error(Collection::UnknownAttribute, 'Unknown attribute foo')
         end
       end
     end
