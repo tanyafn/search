@@ -7,17 +7,22 @@ describe QueryParser do
     subject { described_class.parse(query) }
 
     context 'when can parse query' do
-      let(:query) { 'SeLeCT    users where _id=   "test id"' }
+      let(:queries) do
+        [
+          'select    users where _id="test id"',
+          ' SeLeCT    users  whERe _id=   "test id" '
+        ]
+      end
 
-      it 'returns Query object' do
-        expect(subject).to be_a(Query)
-
-        expect(subject).to have_attributes(
-          collection: :users,
-          attribute: :_id,
-          operator: :'=',
-          value: 'test id'
-        )
+      it 'returns a Query object' do
+        queries.each do |query|
+          expect(described_class.parse(query)).to have_attributes(
+            collection: :users,
+            attribute: :_id,
+            operator: :'=',
+            value: 'test id'
+          )
+        end
       end
     end
 

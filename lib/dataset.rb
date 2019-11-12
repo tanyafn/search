@@ -19,7 +19,7 @@ class Dataset
 
   def add_collection(name, items)
     collection = items.inject(Collection.new(name), :<<)
-    @collections[name.to_sym] = collection
+    @collections[name] = collection
   end
 
   def add_association(attrs)
@@ -69,7 +69,7 @@ class Dataset
 
     child_collection = @collections[assoc.child_collection]
 
-    s = EqualitySelector.new(attribute: assoc.reference_attribute, value: item[:_id])
-    item.dup.tap { |i| i[assoc.children_name] = s.select_from(child_collection) }
+    selector = EqualitySelector.new(attribute: assoc.reference_attribute, value: item[:_id])
+    item.dup.tap { |i| i[assoc.children_name] = selector.select_from(child_collection) }
   end
 end
