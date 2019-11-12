@@ -25,49 +25,53 @@ class Dataset
     @associations << assoc
   end
 
-  def search(query) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-    items = select_items(query)
+  def search(query)
+    raise UnknownCollection, "Unknown collection #{query.collection}" unless @collections.key?(query.collection)
 
-    @associations.each do |assoc|
-      if assoc.child_collection == query.collection
-        unless @collections.key?(assoc.parent_collection)
-          raise InvalidAssociation, "Invalid parent collection #{assoc.parent_collection}"
-        end
-
-        parent_collection = @collections[assoc.parent_collection]
-
-        items.each do |item|
-          parent_id = item[assoc.reference_attribute]
-          item[assoc.parent_name] = parent_collection.get(parent_id)
-        end
-      end
-
-      next unless assoc.parent_collection == query.collection
-      unless @collections.key?(assoc.child_collection)
-        raise InvalidAssociation, "Invalid child collection #{assoc.child_collection}"
-      end
-
-      child_collection = @collections[assoc.child_collection]
-
-      items.each do |item|
-        q = Query.new(
-          collection: assoc.child_collection,
-          attribute: assoc.reference_attribute,
-          operator: '=',
-          value: item[:_id]
-        )
-        item[assoc.children_name] = child_collection.find(q)
-      end
-    end
-
-    items
+    items = @collections[query.collection].find(query)
+    items.map { |item| resolve_associations(item, query.collection) }
   end
 
   private
 
-  def select_items(query)
-    raise UnknownCollection, "Unknown collection #{query.collection}" unless @collections.key?(query.collection)
+  def resolve_associations(item, collection)
+    item_with_associations = item.dup
 
-    @collections[query.collection].find(query)
+    @associations.each do |assoc|
+      if assoc.child_collection == collection
+        item_with_associations = resolve_child_association(assoc, item_with_associations)
+      end
+      if assoc.parent_collection == collection
+        item_with_associations = resolve_parent_association(assoc, item_with_associations)
+      end
+    end
+
+    item_with_associations
+  end
+
+  def resolve_child_association(assoc, item)
+    unless @collections.key?(assoc.parent_collection)
+      raise InvalidAssociation, "Invalid parent collection #{assoc.parent_collection}"
+    end
+
+    parent_collection = @collections[assoc.parent_collection]
+    parent_id = item[assoc.reference_attribute]
+    item.dup.tap { |i| i[assoc.parent_name] = parent_collection.get(parent_id) }
+  end
+
+  def resolve_parent_association(assoc, item) # rubocop:disable Metrics/MethodLength
+    unless @collections.key?(assoc.child_collection)
+      raise InvalidAssociation, "Invalid child collection #{assoc.child_collection}"
+    end
+
+    child_collection = @collections[assoc.child_collection]
+
+    q = Query.new(
+      collection: assoc.child_collection,
+      attribute: assoc.reference_attribute,
+      operator: '=',
+      value: item[:_id]
+    )
+    item.dup.tap { |i| i[assoc.children_name] = child_collection.find(q) }
   end
 end
