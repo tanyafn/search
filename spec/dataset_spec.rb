@@ -7,17 +7,25 @@ describe Dataset do
 
   describe '#add_collection' do
     it 'adds a colelction' do
-      expect { dataset.add_collection(:a, [{a: :b}]) }.to change {
+      expect { dataset.add_collection(:a, [{ a: :b }]) }.to change {
         dataset.collections.count
       }.from(0).to(1)
     end
   end
 
   describe '#add_association' do
-    let(:assoc) { double(:assoc) }
+    let(:attrs) do
+      {
+        child_collection: :users,
+        children_name: :members,
+        reference_attribute: :org_id,
+        parent_collection: :orgs,
+        parent_name: :org
+      }
+    end
 
     it 'adds an association' do
-      expect { dataset.add_association(assoc) }.to change {
+      expect { dataset.add_association(attrs) }.to change {
         dataset.associations.count
       }.from(0).to(1)
     end
@@ -29,20 +37,20 @@ describe Dataset do
     let(:org1) { { _id: '3', name: 'Foo' } }
     let(:org2) { { _id: '4', name: 'Bar' } }
 
-    let(:assoc) do
-      Association.new(
+    let(:attrs) do
+      {
         child_collection: :users,
         children_name: :members,
         reference_attribute: :org_id,
         parent_collection: :orgs,
         parent_name: :org
-      )
+      }
     end
 
     before do
       dataset.add_collection(:users, [user1, user2])
       dataset.add_collection(:orgs, [org1, org2])
-      dataset.add_association(assoc)
+      dataset.add_association(attrs)
     end
 
     describe 'searching for items with parents' do
@@ -104,17 +112,17 @@ describe Dataset do
     end
 
     describe 'search with invalid parent association' do
-      let(:invalid_assoc) do
-        Association.new(
+      let(:invalid_attrs) do
+        {
           child_collection: :users,
           children_name: :members,
           reference_attribute: :org_id,
           parent_collection: :none,
           parent_name: :org
-        )
+        }
       end
 
-      before { dataset.add_association(invalid_assoc) }
+      before { dataset.add_association(invalid_attrs) }
 
       let(:query) do
         Query.new(
@@ -133,17 +141,17 @@ describe Dataset do
     end
 
     describe 'search with invalid child association' do
-      let(:invalid_assoc) do
-        Association.new(
+      let(:invalid_attrs) do
+        {
           child_collection: :none,
           children_name: :members,
           reference_attribute: :org_id,
           parent_collection: :orgs,
           parent_name: :org
-        )
+        }
       end
 
-      before { dataset.add_association(invalid_assoc) }
+      before { dataset.add_association(invalid_attrs) }
 
       let(:query) do
         Query.new(

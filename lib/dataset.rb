@@ -17,15 +17,15 @@ class Dataset
     @associations.clone
   end
 
-  def add_collection(name, attrs)
-    @collections[name.to_sym] = Collection.new(name) << attrs
+  def add_collection(name, items)
+    @collections[name.to_sym] = Collection.new(name) << items
   end
 
-  def add_association(assoc)
-    @associations << assoc
+  def add_association(attrs)
+    @associations << Association.new(attrs)
   end
 
-  def search(query)
+  def search(query) # rubocop:disable Metrics/AbcSize
     raise UnknownCollection, "Unknown collection #{query.collection}" unless @collections.key?(query.collection)
 
     selector = case query.operator
