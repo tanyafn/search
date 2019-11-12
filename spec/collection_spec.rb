@@ -3,8 +3,8 @@
 require 'spec_helper'
 
 describe Collection do
-  let(:item1) { { _id: '111', name: 'Alice', good_at: %w[frontend design] } }
-  let(:item2) { { _id: '222', name: 'Bob', good_at: %w[frontend backend] } }
+  let(:item1) { { _id: '111', name: 'Alice', skills: %w[frontend design] } }
+  let(:item2) { { _id: '222', name: 'Bob', skills: %w[frontend backend] } }
 
   subject(:collection) { described_class.new(:users) }
 
@@ -24,10 +24,10 @@ describe Collection do
     describe 'builds inverted indices for item fields' do
       before { collection << [item1, item2] }
 
-      it { expect(collection.inverted_indices.keys).to eq(%i[_id name good_at]) }
+      it { expect(collection.inverted_indices.keys).to eq(%i[_id name skills]) }
 
-      it 'builds inverted index for "good_at"' do
-        expect(collection.inverted_indices[:good_at].index).to eq(
+      it 'builds inverted index for "skills"' do
+        expect(collection.inverted_indices[:skills].index).to eq(
           'frontend' => %w[111 222],
           'backend' => ['222'],
           'design' => ['111']
@@ -55,7 +55,7 @@ describe Collection do
     before { collection << [item1, item2] }
 
     context 'items exist' do
-      let(:selector) { EqualitySelector.new(attribute: 'good_at', value: 'frontend') }
+      let(:selector) { EqualitySelector.new(attribute: 'skills', value: 'frontend') }
 
       it 'returns found items' do
         expect(collection.select(selector)).to eq([item1, item2])
@@ -63,7 +63,7 @@ describe Collection do
     end
 
     context 'item does not exist' do
-      let(:selector) { EqualitySelector.new(attribute: 'good_at', value: 'maths') }
+      let(:selector) { EqualitySelector.new(attribute: 'skills', value: 'maths') }
 
       it 'returns an empty array' do
         expect(collection.select(selector)).to eq([])
