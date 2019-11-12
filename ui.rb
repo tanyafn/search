@@ -21,6 +21,7 @@ class UI
     select users where name = "Cross Barlow"
     select organizations where shared_tickets = true
     select tickets where type = "incident"
+    select tickets where tags = [ "North Dakota", "Alaska", "Maryland", "Iowa" ]
 
     To command Snoopy to do anything, please enter the command and press 'Enter'
   )

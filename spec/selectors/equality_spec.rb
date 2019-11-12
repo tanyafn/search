@@ -11,10 +11,19 @@ describe Selectors::Equality do
 
   describe '#select_from' do
     context 'matching items exist' do
-      let(:params) { { attribute: 'skills', value: 'frontend' } }
+      context 'single value' do
+        let(:params) { { attribute: 'skills', value: 'frontend' } }
 
-      it 'returns matching items' do
-        expect(selector.select_from(collection)).to eq([item1, item2])
+        it 'returns matching items' do
+          expect(selector.select_from(collection)).to eq([item1, item2])
+        end
+      end
+      context 'value is an array' do
+        let(:params) { { attribute: 'skills', value: %w[design frontend] } }
+
+        it 'returns matching items' do
+          expect(selector.select_from(collection)).to eq([item1])
+        end
       end
     end
 

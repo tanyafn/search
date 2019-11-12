@@ -26,12 +26,11 @@ class Collection
     item.each_key do |attribute|
       index = @inverted_indices[attribute]
       value = item[attribute]
-      case value
-      when Array
+      if value.is_a?(Array)
         value.each { |v| index.add(v, item[:_id]) }
-      else
-        index.add(value, item[:_id])
+        value = value.sort
       end
+      index.add(value, item[:_id])
     end
   end
 end

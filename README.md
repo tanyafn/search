@@ -23,9 +23,11 @@ select <tickets|users|organizations> where <attribute_name> = <number|boolean|st
 ```
 Search is case sensitive and checks for strict equality. Only one search condition allowed.
 
-When condition is for an attribute which values are arrays, the search includes an item in the results if the array contains the searched value.
+When condition is for an attribute which values are arrays, search works in this way:
+ - if the value in the search query is an array, it searches for items that have _this array exactly_ in the attribute, although the order of elements is not important;
+ - if the value in the search query is not an array (i.e string) the search includes an item into the results if the array contains the searched value.
 
-The app prints the results in the console as formatted json.
+The app prints the results in the console as formatted JSON.
 
 ### How It Works & Ideas Behind the Implementation
 

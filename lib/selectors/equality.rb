@@ -6,7 +6,7 @@ module Selectors
 
     def initialize(attribute:, value:)
       @attribute = attribute.to_sym
-      @value = value
+      @value = value.is_a?(Array) ? value.sort : value
     end
 
     attr_reader :attribute, :value
