@@ -26,17 +26,12 @@ class Dataset
     @associations << Association.new(attrs)
   end
 
-  def search(query) # rubocop:disable Metrics/AbcSize
+  def search(query)
     raise UnknownCollection, "Unknown collection #{query.collection}" unless @collections.key?(query.collection)
 
-    selector = case query.operator
-               when :'='
-                 EqualitySelector.new(attribute: query.attribute, value: query.value)
-               else
-                 raise 'Unknown operator'
-               end
-
-    items = @collections[query.collection].select(selector)
+    collection = @collections[query.collection]
+    selector = Mapper.resolve(query)
+    items = selector.select_from(collection)
     items.map { |item| resolve_associations(item, query.collection) }
   end
 
@@ -75,6 +70,6 @@ class Dataset
     child_collection = @collections[assoc.child_collection]
 
     s = EqualitySelector.new(attribute: assoc.reference_attribute, value: item[:_id])
-    item.dup.tap { |i| i[assoc.children_name] = child_collection.select(s) }
+    item.dup.tap { |i| i[assoc.children_name] = s.select_from(child_collection) }
   end
 end

@@ -45,45 +45,4 @@ describe Collection do
       expect(collection.get('111')).to eq(item1)
     end
   end
-
-  describe '#select' do
-    before do
-      collection << item1
-      collection << item2
-    end
-
-    context 'items exist' do
-      let(:selector) { EqualitySelector.new(attribute: 'skills', value: 'frontend') }
-
-      it 'returns found items' do
-        expect(collection.select(selector)).to eq([item1, item2])
-      end
-    end
-
-    context 'item does not exist' do
-      let(:selector) { EqualitySelector.new(attribute: 'skills', value: 'maths') }
-
-      it 'returns an empty array' do
-        expect(collection.select(selector)).to eq([])
-      end
-    end
-
-    context 'selector is not valid' do
-      context 'unknown query operator' do
-        let(:selector) { double }
-
-        it 'raises an error' do
-          expect { collection.select(selector) }.to raise_error(Collection::UnknownOperator)
-        end
-      end
-
-      context 'unknown attribute' do
-        let(:selector) { EqualitySelector.new(attribute: 'none', value: 'maths') }
-
-        it 'raises an error' do
-          expect { collection.select(selector) }.to raise_error(Collection::UnknownAttribute, 'Unknown attribute none')
-        end
-      end
-    end
-  end
 end

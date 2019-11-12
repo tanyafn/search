@@ -17,7 +17,6 @@ WELCOME_MESSAGE = %(
 
 HELP_MESSAGE = %(
   'h' -- to get help.
-  's' -- to search.
   'q' -- to quit.
 
   To command Snoopy to do anything enter the command and press 'Enter'
@@ -64,7 +63,7 @@ while (buffer = Readline.readline('> ', true))
   begin
     case buffer
     when 'q'
-      puts 'Bow-wow! Bye!'
+      puts 'Bye!'
       exit
     when 'h'
       puts HELP_MESSAGE

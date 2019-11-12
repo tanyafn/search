@@ -7,7 +7,7 @@ describe QueryParser do
     subject { described_class.parse(query) }
 
     context 'when can parse query' do
-      let(:query) { 'SeLeCT    users where _id= "test id"' }
+      let(:query) { 'SeLeCT    users where _id=   "test id"' }
 
       it 'returns Query object' do
         expect(subject).to be_a(Query)

@@ -1,9 +1,6 @@
 # frozen_string_literal: true
 
 class Collection
-  UnknownOperator = Class.new(StandardError)
-  UnknownAttribute = Class.new(StandardError)
-
   def initialize(name)
     @name = name
     @items = {}
@@ -21,20 +18,6 @@ class Collection
 
   def get(id)
     @items[id].dup
-  end
-
-  def select(selector)
-    case selector
-    when EqualitySelector
-      unless @inverted_indices.key?(selector.attribute)
-        raise UnknownAttribute, "Unknown attribute #{selector.attribute}"
-      end
-
-      ids = @inverted_indices[selector.attribute].lookup(selector.value)
-      @items.values_at(*ids).compact.map(&:dup)
-    else
-      raise UnknownOperator, "Unknown selector #{selector.class.name}"
-    end
   end
 
   private
