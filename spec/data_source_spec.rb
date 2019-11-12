@@ -3,18 +3,19 @@
 require 'spec_helper'
 
 describe DataSource do
-  subject(:data_source) { described_class }
+  let(:path) { File.expand_path('./spec/data', Dir.pwd).freeze }
+  subject(:data_source) { described_class.new(path) }
 
-  describe '.[]' do
+  describe '#[]' do
     context 'data file with given name exists' do
-      skip 'returns parsed data' do
-        expect(data_source[:users].count).to eq(2)
+      it 'returns parsed data' do
+        expect(data_source[:users].count).to eq(3)
       end
     end
 
     context 'data file with given name does not exist' do
-      skip 'raises an error' do
-        expect { data_source[:none] }.to raise_error(DataSource::BadData)
+      it 'raises an error' do
+        expect { data_source[:invalid_data_format] }.to raise_error(DataSource::BadData)
       end
     end
   end
