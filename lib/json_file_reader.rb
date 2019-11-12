@@ -1,19 +1,15 @@
 # frozen_string_literal: true
 
-class DataSource
+class JsonFileReader
   NotFound = Class.new(StandardError)
   BadData = Class.new(StandardError)
 
-  def initialize(base_path)
-    @base_path = base_path
-  end
-
-  def [](name)
-    json = File.read("#{@base_path}/#{name}.json")
+  def self.read(filename)
+    json = File.read(filename)
     JSON.parse(json, symbolize_names: true)
   rescue JSON::ParserError
     raise BadData, 'Unexpected data format'
   rescue Errno::ENOENT
-    raise NotFound, "Data for #{name} not found in #{@base_path}"
+    raise NotFound, "#{filename} not found"
   end
 end

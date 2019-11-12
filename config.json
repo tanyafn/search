@@ -1,0 +1,46 @@
+{
+  "collections": [
+    {
+      "name": "users",
+      "file": "./data/users.json"
+    },
+    {
+      "name": "organizations",
+      "file": "./data/organizations.json"
+    },
+    {
+      "name": "tickets",
+      "file": "./data/tickets.json"
+    }
+  ],
+  "associations": [
+    {
+      "child_collection": "users",
+      "children_name": "users",
+      "reference_attribute": "organization_id",
+      "parent_collection": "organizations",
+      "parent_name": "organization"
+    },
+    {
+      "child_collection": "tickets",
+      "children_name": "submitted_tickets",
+      "reference_attribute": "submitter_id",
+      "parent_collection": "users",
+      "parent_name": "submitter"
+    },
+    {
+      "child_collection": "tickets",
+      "children_name": "assigned_tickets",
+      "reference_attribute": "assignee_id",
+      "parent_collection": "users",
+      "parent_name": "assignee"
+    },
+    {
+      "child_collection": "tickets",
+      "children_name": "tickets",
+      "reference_attribute": "organization_id",
+      "parent_collection": "organizations",
+      "parent_name": "organization"
+    }
+  ]
+}
