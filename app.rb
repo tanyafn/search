@@ -18,6 +18,9 @@ WELCOME_MESSAGE = %(
 HELP_MESSAGE = %(
   'h' -- to get help.
   'q' -- to quit.
+  select users where name = "Cross Barlow"
+  select organizations where shared_tickets = true
+  select tickets where type = "incident"
 
   To command Snoopy to do anything enter the command and press 'Enter'
 )
@@ -25,6 +28,7 @@ HELP_MESSAGE = %(
 begin
   path = File.expand_path('./data', Dir.pwd).freeze
   datasource = DataSource.new(path)
+
   dataset = Dataset.new
 
   dataset.add_collection(:users, datasource[:users])
