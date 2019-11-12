@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'json'
+
 class QueryParser
   BadData = Class.new(StandardError)
 
