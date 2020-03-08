@@ -20,6 +20,7 @@ to run search from the command line.
 The format is
 ```
 select <tickets|users|organizations> where <attribute_name> = <number|boolean|string>)
+select <tickets|users|organizations> where <attribute_name> > <number|string>)
 ```
 Search is case sensitive and checks for strict equality. Only one search condition allowed.
 
