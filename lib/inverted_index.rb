@@ -2,7 +2,7 @@
 
 require 'set'
 
-class Index
+class InvertedIndex
   def initialize
     @index = Hash.new { |hash, value| hash[value] = Set.new }
   end
@@ -13,5 +13,9 @@ class Index
 
   def lookup(value)
     @index[value].to_a
+  end
+
+  def ids
+    @index.values.flat_map(&:to_a)
   end
 end

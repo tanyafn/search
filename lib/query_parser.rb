@@ -8,7 +8,7 @@ class QueryParser
     \s+(?<collection>\w+)
     \s+where
     \s+(?<attribute>\w+)
-    \s+(?<operator>[=\>\<\-\+\w])
+    \s+(?<operator>[=\>\<\-\+\w]+)
     \s+(?<value>.*)/ix.freeze
 
   def self.parse(query_string)

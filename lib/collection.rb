@@ -4,7 +4,7 @@ class Collection
   def initialize(name)
     @name = name
     @items = {}
-    @inverted_indices = Hash.new { |hsh, key| hsh[key] = Index.new }
+    @inverted_indices = Hash.new { |hsh, key| hsh[key] = InvertedIndex.new }
   end
 
   attr_reader :name, :items, :inverted_indices
