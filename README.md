@@ -31,25 +31,34 @@ The app prints the results in the console as formatted JSON.
 
 ### How It Works & Ideas Behind the Implementation
 
-Each JSON file is loaded into a collection, which items get indexed in inverted indices for faster lookup. Thus startup time may be longer on large datasets, but search will be fast.
+Each JSON file is loaded into a Collection object. Each item in a Collection is indexed in inverted indices (one index per item attribute) for faster lookup. That means the startup time may be longer on large datasets, but search will be fast.
 
-All collections and associations between them are held within a Dataset.
-The dataset is configured "on the fly" by adding collections & associations to it.
-Dataset has “search” method that accepts Query objects that are constructed from the user input.
-From those Query objects, the Dataset can understand which Selector to create to perform search.
-Selectors contain logic for how exactly to get items from a collection using its indices according to the instructions from the Query object.
-Items selected by selectors get associations added to them by the Dataset (since it knows about associations).
+A Dataset contains Collections and Associations between them. The Dataset object is configured "on the fly" with a simple DSL that allows to define collections & associations.
+Dataset has `search` method that accepts Query objects constructed from the user input.
+Using the properties of Query objects, the Dataset can understand which Selector to use to perform search.
+Selectors contain the specific logic for fetching the items from a collection using its indices according to the instructions in the Query object.
+Once items are selected from the collection, the Dataset adds the associated object since it knows about associations.
 
-Implementation is optimised for performance and extensibility.
+Implementation is optimised for performance, extensibility, simplicity, robustness, test coverage, usability.
 
-As for performance, it is using inverted indexes on each field of an item.
-Because of that, items can be found in two lookups without scanning entire collections.
-That should scale much better than linearily.
+As for performance, it is using inverted indexes on each field of an item. Because of that, items can be found efficiently. For example, using two lookups when searching by equality or using index scan and then index lookup. That should scale much better than linearily.
 
-As for extensibility, it is possible to change the data format for input data, add more types of entities, add more associations between them, add more search conditions (>, >=, <, =<, like, etc), make search case-insensitive, change the user interface.
+As for extensibility, it is possible to:
+- add more formats for input data from JSON to XML or CSV,
+- add more types of entities i.e. Comments on Tickets with associations between them,
+- add more search operators (>, >=, <, =<, like, etc),
+- make search case-insensitive,
+- replace the interactive user interface with command-line interface.
 
-What would be nice to add (but I decided not to add to avoid overcomplicating implementation further):
-- search by checking if array attributes contains one or more values,
-- add more search operators (like, >, >=, etc),
-- add option to do case insensitive search,
-- allow to use AND or OR in queries
+As for simplicity:
+- the dataset is configured with a simple DSL that defines collections and associations between them in a human-friendly way,
+- the code is split into many small classes with a single responsibility (or few responsibilities) that are easy to reason about,
+
+As for robustness, the app handles errors in user input and input files to produce meaningful error messages and recover if possible (with invalid user input).
+
+As for test coverage, the app has unit tests and an integration spec.
+
+As for usability, the app
+- can be started with a single command,
+- displays has built-in help,
+- uses an SQL-like basic query language to define search queries.
