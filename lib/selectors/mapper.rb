@@ -6,7 +6,8 @@ module Selectors
 
     SELECTORS = [
       EqualTo,
-      IsUndefined
+      IsUndefined,
+      GreaterThan
     ].freeze
 
     def self.resolve(query)
