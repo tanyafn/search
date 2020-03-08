@@ -5,9 +5,9 @@ require 'spec_helper'
 describe Dataset do
   subject(:dataset) { described_class.new }
 
-  describe '#add_collection' do
-    it 'adds a colelction' do
-      expect { dataset.add_collection(:a, [{ a: :b }]) }.to change {
+  describe '#collection' do
+    it 'adds a collection to a dataset' do
+      expect { dataset.collection(:a, [{ a: :b }]) }.to change {
         dataset.collections.count
       }.from(0).to(1)
     end
@@ -32,10 +32,18 @@ describe Dataset do
   end
 
   describe '#search' do
-    let(:user1) { { _id: '1', name: 'Alice', org_id: '3' } }
-    let(:user2) { { _id: '2', name: 'Bob', org_id: '4' } }
-    let(:org1) { { _id: '3', name: 'Foo' } }
-    let(:org2) { { _id: '4', name: 'Bar' } }
+    let!(:dataset) do
+      described_class.new do
+        collection :users, [
+          { _id: '1', name: 'Alice', org_id: '3' },
+          { _id: '2', name: 'Bob', org_id: '4' }
+        ]
+        collection :orgs, [
+          { _id: '3', name: 'Foo' },
+          { _id: '4', name: 'Bar' }
+        ]
+      end
+    end
 
     let(:attrs) do
       {
@@ -48,8 +56,6 @@ describe Dataset do
     end
 
     before do
-      dataset.add_collection(:users, [user1, user2])
-      dataset.add_collection(:orgs, [org1, org2])
       dataset.add_association(attrs)
     end
 

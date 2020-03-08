@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
 RSpec.describe 'Search integration' do
+  let!(:users_json)         { JsonFileReader.read('./spec/support/data/users.json') }
+  let!(:tickets_json)       { JsonFileReader.read('./spec/support/data/tickets.json') }
+  let!(:organizations_json) { JsonFileReader.read('./spec/support/data/organizations.json') }
+
   let(:expected_result_json) do
     <<-JSON
       [{
@@ -107,15 +111,18 @@ RSpec.describe 'Search integration' do
     JSON
   end
 
-  let(:dataset) { Dataset.new }
+  let(:dataset) do
+    Dataset.new do
+      collection :users, JsonFileReader.read('./spec/support/data/users.json')
+      collection :tickets, JsonFileReader.read('./spec/support/data/tickets.json')
+      collection :organizations, JsonFileReader.read('./spec/support/data/organizations.json')
+    end
+  end
+
   let(:query) { QueryParser.parse('select users where name = "Francisca Rasmussen"') }
 
   before do
     config = JsonFileReader.read('config.json')
-
-    config[:collections].each do |collection|
-      dataset.add_collection(collection[:name].to_sym, JsonFileReader.read(collection[:file]))
-    end
 
     config[:associations].each do |association|
       dataset.add_association(association.transform_values(&:to_sym))

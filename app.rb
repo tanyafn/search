@@ -8,10 +8,11 @@ Dir["#{__dir__}/lib/**/*.rb"].each { |file| require file }
 if $PROGRAM_NAME == __FILE__
   begin
     config = JsonFileReader.read('config.json')
-    dataset = Dataset.new
 
-    config[:collections].each do |collection|
-      dataset.add_collection(collection[:name].to_sym, JsonFileReader.read(collection[:file]))
+    dataset = Dataset.new do
+      collection :users,         JsonFileReader.read('./data/users.json')
+      collection :tickets,       JsonFileReader.read('./data/tickets.json')
+      collection :organizations, JsonFileReader.read('./data/organizations.json')
     end
 
     config[:associations].each do |association|

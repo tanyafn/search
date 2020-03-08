@@ -1,18 +1,4 @@
 {
-  "collections": [
-    {
-      "name": "users",
-      "file": "./data/users.json"
-    },
-    {
-      "name": "organizations",
-      "file": "./data/organizations.json"
-    },
-    {
-      "name": "tickets",
-      "file": "./data/tickets.json"
-    }
-  ],
   "associations": [
     {
       "child_collection": "users",

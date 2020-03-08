@@ -4,9 +4,16 @@ class Dataset
   UnknownCollection = Class.new(StandardError)
   InvalidAssociation = Class.new(StandardError)
 
-  def initialize
+  def initialize(&block)
     @collections = {}
     @associations = []
+
+    instance_eval(&block) if block_given?
+  end
+
+  def collection(name, items)
+    collection = Collection.new(name.to_sym)
+    @collections[collection.name] = items.inject(collection, :<<)
   end
 
   def collections
@@ -15,11 +22,6 @@ class Dataset
 
   def associations
     @associations.clone
-  end
-
-  def add_collection(name, items)
-    collection = items.inject(Collection.new(name), :<<)
-    @collections[name] = collection
   end
 
   def add_association(attrs)
