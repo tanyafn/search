@@ -53,7 +53,6 @@ What would be nice to add (but I decided not to add to avoid overcomplicating im
 - add more search operators (like, >, >=, etc),
 - add option to do case insensitive search,
 - allow to use AND or OR in queries
-- DLS to describe the dataset structure in code instead of using the JSON config file.
 
 ### Note
 Hopefully the implementation is not overcomplicated.
