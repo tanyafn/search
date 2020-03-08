@@ -34,7 +34,7 @@ The app prints the results in the console as formatted JSON.
 Each JSON file is loaded into a collection, which items get indexed in inverted indices for faster lookup. Thus startup time may be longer on large datasets, but search will be fast.
 
 All collections and associations between them are held within a Dataset.
-The structure of the dataset is described in “schema.json” and loaded and interpreted by the app.
+The dataset is configured "on the fly" by adding collections & associations to it.
 Dataset has “search” method that accepts Query objects that are constructed from the user input.
 From those Query objects, the Dataset can understand which Selector to create to perform search.
 Selectors contain logic for how exactly to get items from a collection using its indices according to the instructions from the Query object.
@@ -53,7 +53,3 @@ What would be nice to add (but I decided not to add to avoid overcomplicating im
 - add more search operators (like, >, >=, etc),
 - add option to do case insensitive search,
 - allow to use AND or OR in queries
-
-### Note
-Hopefully the implementation is not overcomplicated.
-I wanted to make it extensible and that naturally leads to having many small classes with narrow responsibilities.
