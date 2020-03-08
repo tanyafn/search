@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Selectors
-  class Absence
+  class IsUndefined
     UnknownAttribute = Class.new(StandardError)
 
     def initialize(attribute:, value: nil)

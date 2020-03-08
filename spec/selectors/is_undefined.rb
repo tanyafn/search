@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe Selectors::Absence do
+describe Selectors::IsUndefined do
   let(:collection) { (Collection.new(:users) << item1) << item2 }
   let(:item1) { { _id: '111', name: 'Alice', email: 'alice@exmple.com' } }
   let(:item2) { { _id: '222', name: 'Bob' } }
@@ -33,7 +33,7 @@ describe Selectors::Absence do
 
       it 'raises an error' do
         expect { selected_items }.to raise_error(
-          Selectors::Absence::UnknownAttribute,
+          Selectors::IsUndefined::UnknownAttribute,
           'Unknown attribute none'
         )
       end

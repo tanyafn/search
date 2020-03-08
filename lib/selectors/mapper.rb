@@ -5,8 +5,8 @@ module Selectors
     UnknownOperator = Class.new(StandardError)
 
     SELECTORS = [
-      Equality,
-      Absence
+      EqualTo,
+      IsUndefined
     ].freeze
 
     def self.resolve(query)

@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe Selectors::Equality do
+describe Selectors::EqualTo do
   let(:collection) { (Collection.new(:users) << item1) << item2 }
   let(:item1) { { _id: '111', name: 'Alice', skills: %w[frontend design] } }
   let(:item2) { { _id: '222', name: 'Bob', skills: %w[frontend backend] } }
@@ -40,7 +40,7 @@ describe Selectors::Equality do
 
       it 'raises an error' do
         expect { selector.select_from(collection) }.to raise_error(
-          Selectors::Equality::UnknownAttribute,
+          Selectors::EqualTo::UnknownAttribute,
           'Unknown attribute none'
         )
       end

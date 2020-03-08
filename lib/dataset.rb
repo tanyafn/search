@@ -77,7 +77,7 @@ class Dataset
 
     child_collection = @collections[assoc.child_collection]
 
-    selector = Selectors::Equality.new(attribute: assoc.reference_attribute, value: item[:_id])
+    selector = Selectors::EqualTo.new(attribute: assoc.reference_attribute, value: item[:_id])
     item.dup.tap { |i| i[assoc.children_name] = selector.select_from(child_collection) }
   end
 end

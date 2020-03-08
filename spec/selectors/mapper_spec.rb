@@ -16,7 +16,7 @@ describe Selectors::Mapper do
     end
 
     it 'returns selector with expected attributes' do
-      expect(selector).to be_a(Selectors::Equality)
+      expect(selector).to be_a(Selectors::EqualTo)
       expect(selector).to have_attributes(attribute: :name, value: 'Francisca')
     end
   end

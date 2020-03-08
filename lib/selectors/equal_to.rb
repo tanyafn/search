@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Selectors
-  class Equality
+  class EqualTo
     UnknownAttribute = Class.new(StandardError)
 
     def initialize(attribute:, value:)
