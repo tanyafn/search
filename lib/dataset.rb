@@ -24,8 +24,14 @@ class Dataset
     @associations.clone
   end
 
-  def add_association(attrs)
-    @associations << Association.new(attrs)
+  def associate(parent_collection, with:, as: nil, via:, parent_as:)
+    @associations << Association.new(
+      parent_collection: parent_collection,
+      child_collection: with,
+      children_name: as || with,
+      reference_attribute: via,
+      parent_name: parent_as
+    )
   end
 
   def search(query)

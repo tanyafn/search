@@ -116,18 +116,16 @@ RSpec.describe 'Search integration' do
       collection :users, JsonFileReader.read('./spec/support/data/users.json')
       collection :tickets, JsonFileReader.read('./spec/support/data/tickets.json')
       collection :organizations, JsonFileReader.read('./spec/support/data/organizations.json')
+
+      associate :organizations, with: :users,   via: :organization_id, parent_as: :organization
+      associate :organizations, with: :tickets, via: :organization_id, parent_as: :organization
+
+      associate :users, with: :tickets, as: :submitted_tickets, via: :submitter_id, parent_as: :submitter
+      associate :users, with: :tickets, as: :assigned_tickets,  via: :assignee_id,  parent_as: :assignee
     end
   end
 
   let(:query) { QueryParser.parse('select users where name = "Francisca Rasmussen"') }
-
-  before do
-    config = JsonFileReader.read('config.json')
-
-    config[:associations].each do |association|
-      dataset.add_association(association.transform_values(&:to_sym))
-    end
-  end
 
   describe 'Search' do
     subject(:result) { dataset.search(query) }

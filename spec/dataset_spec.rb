@@ -13,26 +13,15 @@ describe Dataset do
     end
   end
 
-  describe '#add_association' do
-    let(:attrs) do
-      {
-        child_collection: :users,
-        children_name: :members,
-        reference_attribute: :org_id,
-        parent_collection: :orgs,
-        parent_name: :org
-      }
-    end
-
+  describe '#associate' do
     it 'adds an association' do
-      expect { dataset.add_association(attrs) }.to change {
-        dataset.associations.count
-      }.from(0).to(1)
+      expect { dataset.associate(:orgs, with: :users, as: :members, via: :org_id, parent_as: :org) }
+        .to change { dataset.associations.count }.from(0).to(1)
     end
   end
 
   describe '#search' do
-    let!(:dataset) do
+    let(:dataset) do
       described_class.new do
         collection :users, [
           { _id: '1', name: 'Alice', org_id: '3' },
@@ -42,21 +31,9 @@ describe Dataset do
           { _id: '3', name: 'Foo' },
           { _id: '4', name: 'Bar' }
         ]
+
+        associate :orgs, with: :users, as: :members, via: :org_id, parent_as: :org
       end
-    end
-
-    let(:attrs) do
-      {
-        child_collection: :users,
-        children_name: :members,
-        reference_attribute: :org_id,
-        parent_collection: :orgs,
-        parent_name: :org
-      }
-    end
-
-    before do
-      dataset.add_association(attrs)
     end
 
     describe 'searching for items with parents' do
@@ -118,17 +95,9 @@ describe Dataset do
     end
 
     describe 'search with invalid parent association' do
-      let(:invalid_attrs) do
-        {
-          child_collection: :users,
-          children_name: :members,
-          reference_attribute: :org_id,
-          parent_collection: :none,
-          parent_name: :org
-        }
+      before do
+        dataset.associate :non_existing_collection, with: :users, via: :org_id, parent_as: :org
       end
-
-      before { dataset.add_association(invalid_attrs) }
 
       let(:query) do
         Query.new(
@@ -147,17 +116,9 @@ describe Dataset do
     end
 
     describe 'search with invalid child association' do
-      let(:invalid_attrs) do
-        {
-          child_collection: :none,
-          children_name: :members,
-          reference_attribute: :org_id,
-          parent_collection: :orgs,
-          parent_name: :org
-        }
+      before do
+        dataset.associate :orgs, with: :non_existing_collection, via: :org_id, parent_as: :org
       end
-
-      before { dataset.add_association(invalid_attrs) }
 
       let(:query) do
         Query.new(

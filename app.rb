@@ -7,16 +7,16 @@ Dir["#{__dir__}/lib/**/*.rb"].each { |file| require file }
 
 if $PROGRAM_NAME == __FILE__
   begin
-    config = JsonFileReader.read('config.json')
-
     dataset = Dataset.new do
       collection :users,         JsonFileReader.read('./data/users.json')
       collection :tickets,       JsonFileReader.read('./data/tickets.json')
       collection :organizations, JsonFileReader.read('./data/organizations.json')
-    end
 
-    config[:associations].each do |association|
-      dataset.add_association(association.transform_values(&:to_sym))
+      associate :organizations, with: :users,   via: :organization_id, parent_as: :organization
+      associate :organizations, with: :tickets, via: :organization_id, parent_as: :organization
+
+      associate :users, with: :tickets, as: :submitted_tickets, via: :submitter_id, parent_as: :submitter
+      associate :users, with: :tickets, as: :assigned_tickets,  via: :assignee_id,  parent_as: :assignee
     end
   rescue StandardError => e
     puts "#{e.message}. The program cannot start."
