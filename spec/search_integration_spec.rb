@@ -113,8 +113,8 @@ RSpec.describe 'Search integration' do
 
   let(:dataset) do
     Dataset.new do
-      collection :users, JsonFileReader.read('./spec/support/data/users.json')
-      collection :tickets, JsonFileReader.read('./spec/support/data/tickets.json')
+      collection :users,         JsonFileReader.read('./spec/support/data/users.json')
+      collection :tickets,       JsonFileReader.read('./spec/support/data/tickets.json')
       collection :organizations, JsonFileReader.read('./spec/support/data/organizations.json')
 
       associate :organizations, with: :users,   via: :organization_id, parent_as: :organization
