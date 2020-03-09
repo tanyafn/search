@@ -14,10 +14,7 @@ describe Collection do
     end
 
     describe 'builds inverted indices for item fields' do
-      before do
-        collection << item1
-        collection << item2
-      end
+      before { collection << item1 << item2 }
 
       it { expect(collection.inverted_indices.keys).to eq(%i[_id name skills]) }
     end
@@ -28,6 +25,14 @@ describe Collection do
 
     it 'returns item by key' do
       expect(collection['111']).to eq(item1)
+    end
+  end
+
+  describe '#item_ids' do
+    before { collection << item1 << item2 }
+
+    it 'returns ids of indexed items' do
+      expect(collection.item_ids).to contain_exactly('111', '222')
     end
   end
 end

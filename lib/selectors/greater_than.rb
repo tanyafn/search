@@ -16,7 +16,9 @@ module Selectors
     end
 
     def select_from(collection)
-      raise UnknownAttribute, "Unknown attribute #{attribute}" unless collection.inverted_indices.key?(attribute)
+      unless collection.inverted_indices.key?(attribute)
+        raise UnknownAttribute, "Unknown attribute #{attribute}"
+      end
 
       collection
         .inverted_indices[attribute]

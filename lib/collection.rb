@@ -20,6 +20,10 @@ class Collection
     @items[id].dup
   end
 
+  def item_ids
+    @items.keys
+  end
+
   private
 
   def add_item_to_inverted_indices(item)

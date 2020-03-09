@@ -16,11 +16,12 @@ module Selectors
     end
 
     def select_from(collection)
-      raise UnknownAttribute, "Unknown attribute #{attribute}" unless collection.inverted_indices.key?(attribute)
+      unless collection.inverted_indices.key?(attribute)
+        raise UnknownAttribute, "Unknown attribute #{attribute}"
+      end
 
       inverted_index = collection.inverted_indices[attribute]
-      item_ids = collection.items.keys - inverted_index.ids
-
+      item_ids = collection.item_ids - inverted_index.ids
       item_ids.map { |item_id| collection[item_id] }
     end
   end
