@@ -18,29 +18,29 @@ select <tickets|users|organizations> where <attribute_name> = <number|boolean|st
 ```
 to run search from the command line.
 
-#### List of all supported commands with the examples:
+### List of all supported commands with the examples:
 
 1. Search with strict equality condition:
-```
-select users where name = "Cross Barlow"
-select organizations where shared_tickets = true
-select tickets where tags = [ "North Dakota", "Alaska", "Maryland", "Iowa" ]
-```
+  ```
+  select users where name = "Cross Barlow"
+  select organizations where shared_tickets = true
+  select tickets where tags = [ "North Dakota", "Alaska", "Maryland", "Iowa" ]
+  ```
 
-When condition is for an attribute which values are arrays, search works in this way:
- - if the value in the search query is an array, it searches for items that have _this array exactly_ in the attribute, although the order of elements is not important;
- - if the value in the search query is not an array (i.e string) the search includes an item into the results if the array contains the searched value.
+  When condition is for an attribute which values are arrays, search works in this way:
+   - if the value in the search query is an array, it searches for items that have _this array exactly_ in the attribute, although the order of elements is not important;
+   - if the value in the search query is not an array (i.e string) the search includes an item into the results if the array contains the searched value.
 
 2. Search for records with a missing field value:
-```
-select users where email is null
-```
+  ```
+  select users where email is null
+  ```
 
 3. Search with "greater then"/"less then" condition
-```
-select organizations where _id > 100
-select organizations where _id < 1000
-```
+  ```
+  select organizations where _id > 100
+  select organizations where _id < 1000
+  ```
 
 Search is case sensitive. Only one search condition allowed.
 
