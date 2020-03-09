@@ -20,10 +20,10 @@ class UI
 
     select users where name = "Cross Barlow"
     select organizations where shared_tickets = true
-    select organizations where _id > 100
-    select organizations where _id < 100
-    select tickets where type = "incident"
     select tickets where tags = [ "North Dakota", "Alaska", "Maryland", "Iowa" ]
+    select users where email is null
+    select organizations where _id > 100
+    select organizations where _id < 1000
 
     To command Snoopy to do anything, please enter the command and press 'Enter'
   )
