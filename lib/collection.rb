@@ -32,8 +32,7 @@ class Collection
     item.each do |attribute, value|
       index = @inverted_indices[attribute]
 
-      case value
-      when Array
+      if value.is_a?(Array)
         value.each { |v| index.add(v, item_id) }
         index.add(value.sort, item_id)
       else

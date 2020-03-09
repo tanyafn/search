@@ -11,3 +11,5 @@ Metrics/MethodLength:
   Max: 20
 Naming/UncommunicativeMethodParamName:
   MinNameLength: 2
+Lint/UnusedMethodArgument:
+  Enabled: false
