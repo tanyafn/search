@@ -11,7 +11,7 @@ class Collection
 
   def <<(item)
     @items[item[:_id]] = item
-    add_item_to_inverted_index(item)
+    add_item_to_inverted_indices(item)
 
     self
   end
@@ -22,15 +22,18 @@ class Collection
 
   private
 
-  def add_item_to_inverted_index(item)
-    item.each_key do |attribute|
+  def add_item_to_inverted_indices(item)
+    item_id = item[:_id]
+
+    item.each do |attribute, value|
       index = @inverted_indices[attribute]
-      value = item[attribute]
-      if value.is_a?(Array)
-        value.each { |v| index.add(v, item[:_id]) }
-        value = value.sort
+
+      if Array === value
+        value.each { |v| index.add(v, item_id) }
+        index.add(value.sort, item_id)
+      else
+        index.add(value, item_id)
       end
-      index.add(value, item[:_id])
     end
   end
 end
