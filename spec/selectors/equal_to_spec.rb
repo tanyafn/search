@@ -40,7 +40,7 @@ describe Selectors::EqualTo do
 
       it 'raises an error' do
         expect { selector.select_from(collection) }.to raise_error(
-          Selectors::EqualTo::UnknownAttribute,
+          Selectors::UnknownAttribute,
           'Unknown attribute none'
         )
       end

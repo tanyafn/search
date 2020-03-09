@@ -38,7 +38,7 @@ class Dataset
     raise UnknownCollection, "Unknown collection #{query.collection}" unless @collections.key?(query.collection)
 
     collection = @collections[query.collection]
-    selector = Selectors::Mapper.resolve(query)
+    selector = Selectors.resolve(query)
     items = selector.select_from(collection)
     items.map { |item| resolve_associations(item, query.collection) }
   end

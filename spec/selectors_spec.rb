@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe Selectors::Mapper do
+describe Selectors do
   subject(:selector) { described_class.resolve(query) }
 
   context 'selector for operator exist' do
@@ -32,7 +32,7 @@ describe Selectors::Mapper do
     end
 
     it 'raises an error' do
-      expect { selector }.to raise_error(Selectors::Mapper::UnknownOperator, 'Unknown operator <>')
+      expect { selector }.to raise_error(Selectors::UnknownOperator, 'Unknown operator <>')
     end
   end
 end

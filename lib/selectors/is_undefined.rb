@@ -2,9 +2,7 @@
 
 module Selectors
   class IsUndefined
-    UnknownAttribute = Class.new(StandardError)
-
-    def initialize(attribute:, value: nil)
+    def initialize(attribute:, value:)
       @attribute = attribute.to_sym
       @value = value
     end

@@ -2,8 +2,6 @@
 
 module Selectors
   class EqualTo
-    UnknownAttribute = Class.new(StandardError)
-
     def initialize(attribute:, value:)
       @attribute = attribute.to_sym
       @value = value.is_a?(Array) ? value.sort : value

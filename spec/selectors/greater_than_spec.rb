@@ -32,7 +32,7 @@ describe Selectors::GreaterThan do
 
       it 'raises an error' do
         expect { selector.select_from(collection) }.to raise_error(
-          Selectors::GreaterThan::UnknownAttribute,
+          Selectors::UnknownAttribute,
           'Unknown attribute unknown'
         )
       end
