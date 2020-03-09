@@ -47,7 +47,7 @@ As for performance, it is using inverted indexes on each field of an item. Becau
 As for extensibility, it is possible to:
 - add more formats for input data from JSON to XML or CSV,
 - add more types of entities i.e. Comments on Tickets with associations between them,
-- add more search operators (>, >=, <, =<, like, etc),
+- add more search operators (>=, =<, like, <>, etc),
 - make search case-insensitive,
 - replace the interactive user interface with command-line interface.
 
