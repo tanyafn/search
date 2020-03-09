@@ -47,12 +47,14 @@ describe Dataset do
       end
 
       it 'finds items with parent associations' do
-        expect(dataset.search(query)).to eq([
-          _id: '1',
-          name: 'Alice',
-          org: { _id: '3', name: 'Foo' },
-          org_id: '3'
-        ])
+        expect(dataset.search(query)).to eq(
+          [
+            _id: '1',
+            name: 'Alice',
+            org: { _id: '3', name: 'Foo' },
+            org_id: '3'
+          ]
+        )
       end
     end
 
@@ -67,11 +69,13 @@ describe Dataset do
       end
 
       it 'finds items with child associations' do
-        expect(dataset.search(query)).to eq([
-          _id: '3',
-          name: 'Foo',
-          members: [{ _id: '1', name: 'Alice', org_id: '3' }]
-        ])
+        expect(dataset.search(query)).to eq(
+          [
+            _id: '3',
+            name: 'Foo',
+            members: [{ _id: '1', name: 'Alice', org_id: '3' }]
+          ]
+        )
       end
     end
 
@@ -86,7 +90,9 @@ describe Dataset do
       end
 
       it 'raises error' do
-        expect { dataset.search(query) }.to raise_error(Dataset::UnknownCollection)
+        expect do
+          dataset.search(query)
+        end.to raise_error(Dataset::UnknownCollection)
       end
     end
 
@@ -105,7 +111,9 @@ describe Dataset do
       end
 
       it 'raises error' do
-        expect { dataset.search(query) }.to raise_error(Dataset::InvalidAssociation)
+        expect do
+          dataset.search(query)
+        end.to raise_error(Dataset::InvalidAssociation)
       end
     end
 
@@ -124,7 +132,9 @@ describe Dataset do
       end
 
       it 'raises error' do
-        expect { dataset.search(query) }.to raise_error(Dataset::InvalidAssociation)
+        expect do
+          dataset.search(query)
+        end.to raise_error(Dataset::InvalidAssociation)
       end
     end
   end
