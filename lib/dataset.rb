@@ -46,21 +46,18 @@ class Dataset
   private
 
   def resolve_associations(item, collection)
-    item_with_associations = item.dup
-
-    @associations.each do |assoc|
+    @associations.inject(item.dup) do |item_with_associations, assoc|
       if assoc.child_collection == collection
-        item_with_associations = resolve_child_association(assoc, item_with_associations)
-      end
-      if assoc.parent_collection == collection
-        item_with_associations = resolve_parent_association(assoc, item_with_associations)
+        merge_with_parent(assoc, item_with_associations)
+      elsif assoc.parent_collection == collection
+        merge_with_children(assoc, item_with_associations)
+      else
+        item_with_associations
       end
     end
-
-    item_with_associations
   end
 
-  def resolve_child_association(assoc, item)
+  def merge_with_parent(assoc, item)
     unless @collections.key?(assoc.parent_collection)
       raise InvalidAssociation, "Invalid parent collection #{assoc.parent_collection}"
     end
@@ -70,7 +67,7 @@ class Dataset
     item.dup.tap { |i| i[assoc.parent_name] = parent_collection[parent_item_id] }
   end
 
-  def resolve_parent_association(assoc, item)
+  def merge_with_children(assoc, item)
     unless @collections.key?(assoc.child_collection)
       raise InvalidAssociation, "Invalid child collection #{assoc.child_collection}"
     end
