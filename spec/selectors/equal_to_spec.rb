@@ -4,12 +4,12 @@ require 'spec_helper'
 
 describe Selectors::EqualTo do
   let(:collection) { Collection.new(:users) << item1 << item2 }
-  let(:item1) { { _id: '111', name: 'Alice', skills: %w[frontend design] } }
-  let(:item2) { { _id: '222', name: 'Bob', skills: %w[frontend backend] } }
-
-  subject(:selector) { described_class.new(params) }
+  let(:item1) { { _id: '1', name: 'Alice', skills: %w[frontend design] } }
+  let(:item2) { { _id: '2', name: 'Bob', skills: %w[frontend backend] } }
 
   describe '#select_from' do
+    let(:selector) { described_class.new(params) }
+
     context 'matching items exist' do
       context 'single value' do
         let(:params) { { attribute: 'skills', value: 'frontend' } }
@@ -33,17 +33,6 @@ describe Selectors::EqualTo do
 
       it 'returns an empty array' do
         expect(selector.select_from(collection)).to eq([])
-      end
-    end
-
-    context 'unknown attribute' do
-      let(:params) { { attribute: 'none', value: 'math' } }
-
-      it 'raises an error' do
-        expect { selector.select_from(collection) }.to raise_error(
-          Selectors::UnknownAttribute,
-          'Unknown attribute none'
-        )
       end
     end
   end

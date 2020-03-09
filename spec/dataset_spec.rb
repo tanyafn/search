@@ -6,8 +6,8 @@ describe Dataset do
   subject(:dataset) { described_class.new }
 
   describe '#collection' do
-    it 'adds a collection to a dataset' do
-      expect { dataset.collection(:a, [{ a: :b }]) }.to change {
+    it 'adds a collection' do
+      expect { dataset.collection(:a, [{ _id: '1' }]) }.to change {
         dataset.collections.count
       }.from(0).to(1)
     end
@@ -47,13 +47,12 @@ describe Dataset do
       end
 
       it 'finds items with parent associations' do
-        expect(dataset.search(query).size).to eq(1)
-        expect(dataset.search(query).first).to eq(
+        expect(dataset.search(query)).to eq([
           _id: '1',
           name: 'Alice',
           org: { _id: '3', name: 'Foo' },
           org_id: '3'
-        )
+        ])
       end
     end
 
@@ -68,12 +67,11 @@ describe Dataset do
       end
 
       it 'finds items with child associations' do
-        expect(dataset.search(query).size).to eq(1)
-        expect(dataset.search(query).first).to eq(
+        expect(dataset.search(query)).to eq([
           _id: '3',
           name: 'Foo',
           members: [{ _id: '1', name: 'Alice', org_id: '3' }]
-        )
+        ])
       end
     end
 
@@ -88,9 +86,7 @@ describe Dataset do
       end
 
       it 'raises error' do
-        expect do
-          dataset.search(query)
-        end.to raise_error(Dataset::UnknownCollection)
+        expect { dataset.search(query) }.to raise_error(Dataset::UnknownCollection)
       end
     end
 
@@ -109,9 +105,7 @@ describe Dataset do
       end
 
       it 'raises error' do
-        expect do
-          dataset.search(query)
-        end.to raise_error(Dataset::InvalidAssociation)
+        expect { dataset.search(query) }.to raise_error(Dataset::InvalidAssociation)
       end
     end
 
@@ -130,9 +124,7 @@ describe Dataset do
       end
 
       it 'raises error' do
-        expect do
-          dataset.search(query)
-        end.to raise_error(Dataset::InvalidAssociation)
+        expect { dataset.search(query) }.to raise_error(Dataset::InvalidAssociation)
       end
     end
   end
