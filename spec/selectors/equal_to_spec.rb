@@ -3,7 +3,7 @@
 require 'spec_helper'
 
 describe Selectors::EqualTo do
-  let(:collection) { (Collection.new(:users) << item1) << item2 }
+  let(:collection) { Collection.new(:users) << item1 << item2 }
   let(:item1) { { _id: '111', name: 'Alice', skills: %w[frontend design] } }
   let(:item2) { { _id: '222', name: 'Bob', skills: %w[frontend backend] } }
 
@@ -18,6 +18,7 @@ describe Selectors::EqualTo do
           expect(selector.select_from(collection)).to eq([item1, item2])
         end
       end
+
       context 'value is an array' do
         let(:params) { { attribute: 'skills', value: %w[design frontend] } }
 

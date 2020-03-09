@@ -14,7 +14,7 @@ class InvertedIndex
   end
 
   def lookup(value)
-    @index[value].to_a
+    @index.fetch(value, []).to_a
   end
 
   def ids
@@ -22,8 +22,6 @@ class InvertedIndex
   end
 
   def each
-    @index.each do |value, ids|
-      yield value, ids.to_a
-    end
+    @index.each { |value, ids| yield(value, ids.to_a) }
   end
 end

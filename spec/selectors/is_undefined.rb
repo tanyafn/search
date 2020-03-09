@@ -3,9 +3,9 @@
 require 'spec_helper'
 
 describe Selectors::IsUndefined do
-  let(:collection) { (Collection.new(:users) << item1) << item2 }
   let(:item1) { { _id: '111', name: 'Alice', email: 'alice@exmple.com' } }
   let(:item2) { { _id: '222', name: 'Bob' } }
+  let(:collection) { Collection.new(:users) << item1 << item2 }
 
   subject(:selector) { described_class.new(params) }
 

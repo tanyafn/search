@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe Selectors::GreaterThan do
+describe Selectors::LessThan do
   let(:collection) { Collection.new(:users) << item1 << item2 << item3 }
   let(:item1) { { _id: '111', name: 'Alice', last_visit: '2020-03-01' } }
   let(:item2) { { _id: '222', name: 'Bob', last_visit: '2020-02-01' } }
@@ -12,7 +12,7 @@ describe Selectors::GreaterThan do
 
   describe '#select_from' do
     context 'matching items exist' do
-      let(:params) { { attribute: 'last_visit', value: '2020-01-01' } }
+      let(:params) { { attribute: 'last_visit', value: '2020-04-01' } }
 
       it 'returns matching items' do
         expect(selector.select_from(collection)).to eq([item1, item2])
@@ -20,7 +20,7 @@ describe Selectors::GreaterThan do
     end
 
     context 'no matching items' do
-      let(:params) { { attribute: 'last_visit', value: '2020-03-01' } }
+      let(:params) { { attribute: 'last_visit', value: '2020-02-01' } }
 
       it 'returns an empty array' do
         expect(selector.select_from(collection)).to eq([])
