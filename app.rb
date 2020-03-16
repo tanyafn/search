@@ -1,9 +1,15 @@
 # frozen_string_literal: true
 
 require 'json'
-require_relative './ui'
-
-Dir["#{__dir__}/lib/**/*.rb"].each { |file| require file }
+require_relative 'ui'
+require_relative 'lib/query'
+require_relative 'lib/query_parser'
+require_relative 'lib/json_file_reader'
+require_relative 'lib/inverted_index'
+require_relative 'lib/dataset'
+require_relative 'lib/collection'
+require_relative 'lib/association'
+require_relative 'lib/selectors'
 
 if $PROGRAM_NAME == __FILE__
   begin

@@ -1,5 +1,11 @@
 # frozen_string_literal: true
 
+require_relative 'selectors/base'
+require_relative 'selectors/equal_to'
+require_relative 'selectors/is_undefined'
+require_relative 'selectors/greater_than'
+require_relative 'selectors/less_than'
+
 module Selectors
   UnknownOperator = Class.new(StandardError)
   UnknownAttribute = Class.new(StandardError)
